@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="./assets/icon.png" width="120" alt="Libre icon" />
+</p>
+
 # libre•
 
 [![License: Proprietary](https://img.shields.io/badge/License-Proprietary-red.svg)](./LICENSE)
