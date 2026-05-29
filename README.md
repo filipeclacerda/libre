@@ -1,5 +1,7 @@
 # libre•
 
+[![License: Proprietary](https://img.shields.io/badge/License-Proprietary-red.svg)](./LICENSE)
+
 > Stop smoking, start living.
 
 Libre is a quit-smoking companion app that turns every smoke-free minute into a concrete victory — tracking time, money saved, health recovery, and personal cravings journal.
