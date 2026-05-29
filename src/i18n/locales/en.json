@@ -1,0 +1,467 @@
+{
+  "tabs": {
+    "home": "Home",
+    "health": "Health",
+    "stats": "Stats",
+    "diary": "Diary",
+    "settings": "Profile"
+  },
+  "home": {
+    "smokeFree": "SMOKE FREE",
+    "streakActive": "🔥 Streak active",
+    "greeting": "Hello, {{name}} 👋",
+    "hours": "hours",
+    "minutes": "minutes",
+    "seconds": "seconds",
+    "days": "days",
+    "cigsNotSmoked": "cigarettes not smoked",
+    "saved": "saved",
+    "lifeRegained": "of life regained",
+    "tarAvoided": "of tar avoided",
+    "nextAchievement": "NEXT ACHIEVEMENT",
+    "remaining": "{{label}} left",
+    "achievementUnlocked": "Achievement unlocked!",
+    "incredibleBtn": "Amazing! 🎉",
+    "quoteSection": "Quote of the day",
+    "thisWeek": "THIS WEEK",
+    "cravingsRegistered": "cravings\nrecorded",
+    "resistanceRate": "resistance\nrate",
+    "mostCommonTrigger": "most common\ntrigger",
+    "healthMilestones": "HEALTH MILESTONES",
+    "viewHealthProgress": "See your health progress →",
+    "sosButton": "🚨 I want to smoke",
+    "relapses_one": "{{count}} relapse recorded",
+    "relapses_other": "{{count}} relapses recorded",
+    "timeLeft_hours_one": "{{count}}h remaining",
+    "timeLeft_hours_other": "{{count}}h remaining",
+    "timeLeft_days_one": "{{count}} day",
+    "timeLeft_days_other": "{{count}} days",
+    "timeLeft_cigarettes_one": "{{count}} cigarette",
+    "timeLeft_cigarettes_other": "{{count}} cigarettes",
+    "timeLeft_cravings_one": "{{count}} craving beaten",
+    "timeLeft_cravings_other": "{{count}} cravings beaten",
+    "timeLeft_entries_one": "{{count}} entry",
+    "timeLeft_entries_other": "{{count}} entries",
+    "timeLeft_money": "$ {{amount}}",
+    "timeSteps": {
+      "h12": "First Night",
+      "h24": "First Dawn",
+      "d2": "Two Days Strong",
+      "d3": "Three Days Strong",
+      "w1": "One Week",
+      "w2": "Fifteen Days",
+      "m1": "One Month Free",
+      "m2": "Two Months Free",
+      "m3": "Ninety Days",
+      "m6": "Half a Year",
+      "y1": "One Year",
+      "y2": "Two Years of New Life",
+      "y5": "Five Years Free"
+    }
+  },
+  "health": {
+    "title": "Health milestones",
+    "subtitle": "{{done}} of {{total}} achieved · every day counts.",
+    "overallProgress": "Overall progress",
+    "achieved": "ACHIEVED",
+    "inMin": "IN {{n}} MIN",
+    "inHours": "IN {{n}} HOURS",
+    "inDays": "IN {{n}} DAYS",
+    "milestones": {
+      "20min": {
+        "time": "20 minutes",
+        "description": "Blood pressure and heart rate drop to normal levels. Circulation in hands and feet already improves."
+      },
+      "8h": {
+        "time": "8 hours",
+        "description": "Nicotine and carbon monoxide levels in the blood drop by half. Blood oxygen starts to normalize."
+      },
+      "12h": {
+        "time": "12 hours",
+        "description": "Carbon monoxide completely eliminated from the blood. All cells in the body receive more oxygen."
+      },
+      "24h": {
+        "time": "24 hours",
+        "description": "The risk of heart attack starts to decrease. Early withdrawal anxiety and irritability tend to pass."
+      },
+      "48h": {
+        "time": "48 hours",
+        "description": "Nerve endings damaged by tobacco begin to recover. Smell and taste become noticeably sharper."
+      },
+      "3d": {
+        "time": "3 days",
+        "description": "Nicotine completely eliminated from the body. Bronchial tubes relax — breathing becomes visibly easier. Energy increases."
+      },
+      "1w": {
+        "time": "1 week",
+        "description": "Blood is less viscous. Peripheral circulation improves — hands and feet become warmer. Skin more oxygenated."
+      },
+      "2w": {
+        "time": "2 weeks",
+        "description": "Circulation improves noticeably and lung capacity can increase by up to 30%. Physical exercise becomes easier."
+      },
+      "3w": {
+        "time": "3 weeks",
+        "description": "Circulation in the limbs stabilizes. Walking long distances without getting so tired is already noticeable."
+      },
+      "1m": {
+        "time": "1 month",
+        "description": "Lung cilia begin to regenerate. Productive coughing decreases, the lungs clean themselves more efficiently."
+      },
+      "3m": {
+        "time": "3 months",
+        "description": "Blood circulation substantially improved. Risk of thrombosis decreases. Lung function continues to improve."
+      },
+      "6m": {
+        "time": "6 months",
+        "description": "Lung cilia fully regenerated — mucus and residue are removed normally. Wheezing and shortness of breath reduce greatly."
+      },
+      "9m": {
+        "time": "9 months",
+        "description": "Lungs almost completely recovered. Respiratory infections (bronchitis, flu) become much less frequent."
+      },
+      "1y": {
+        "time": "1 year",
+        "description": "Risk of coronary heart disease drops by 50% compared to an active smoker. An extraordinary scientific milestone."
+      },
+      "2y": {
+        "time": "2 years",
+        "description": "Risk of heart attack approaches that of someone who never smoked. Coronary arteries function like those of a non-smoker."
+      },
+      "5y": {
+        "time": "5 years",
+        "description": "Stroke risk reduces to the level of non-smokers. Risk of mouth and throat cancers also falls by half."
+      },
+      "10y": {
+        "time": "10 years",
+        "description": "Lung cancer risk drops by half. Risk of larynx, esophagus, and bladder cancers also decrease significantly."
+      },
+      "15y": {
+        "time": "15 years",
+        "description": "Risk of coronary heart disease equal to that of someone who never smoked. 15 years of choices that changed everything."
+      },
+      "20y": {
+        "time": "20 years",
+        "description": "Risk of pancreatic, kidney, bladder, and esophageal cancers equals that of non-smokers. You completely transformed your health."
+      }
+    }
+  },
+  "diary": {
+    "title": "Diary",
+    "subtitle_one": "{{count}} entry · {{won}} cravings beaten",
+    "subtitle_other": "{{count}} entries · {{won}} cravings beaten",
+    "noEntries": "No entries yet",
+    "emptyTitle": "No entries yet",
+    "emptyText": "When you feel like smoking, record it here. This helps you understand your patterns.",
+    "today": "Today",
+    "yesterday": "Yesterday",
+    "resisted": "✓ Resisted",
+    "ceded": "✕ Gave in",
+    "trigger": "Trigger:",
+    "intensity": "Intensity:",
+    "cigarettesSmoked": "Cigarettes smoked:",
+    "modal": {
+      "title": "Record craving",
+      "intensity": "INTENSITY",
+      "trigger": "TRIGGER",
+      "result": "RESULT",
+      "resisted": "✓ Resisted",
+      "ceded": "✕ Gave in",
+      "howAreYou": "HOW ARE YOU FEELING (OPTIONAL)",
+      "notesPh": "Describe how you're feeling right now...",
+      "howManyCigs": "How many cigarettes did you smoke?",
+      "save": "Save entry"
+    },
+    "triggers": {
+      "Estresse": "Stress",
+      "Café": "Coffee",
+      "Álcool": "Alcohol",
+      "Pós-refeição": "After meal",
+      "Tédio": "Boredom",
+      "Social": "Social",
+      "Trabalho": "Work",
+      "Ansiedade": "Anxiety"
+    }
+  },
+  "stats": {
+    "title": "Statistics",
+    "last7days": "Last 7 days",
+    "last30days": "Last 30 days",
+    "lastYear": "Last year",
+    "accumulatedSavings": "ACCUMULATED SAVINGS",
+    "todaySavings": "+ $ {{amount}} today",
+    "fewData": "Not enough data yet — keep it up!",
+    "cravingsByWeekday": "CRAVINGS BY DAY OF THE WEEK",
+    "hardestDay": "{{day}} is the hardest day — stay alert.",
+    "noCravings": "No cravings recorded in this period.",
+    "relapses": "RELAPSES & HARM REDUCTION",
+    "register": "+ Record",
+    "noRelapses": "No relapses recorded. Keep it up! 🌟",
+    "cravingsCeded_one": "{{count}} craving given in",
+    "cravingsCeded_other": "{{count}} cravings given in",
+    "cigsSmoked": "cigarettes smoked",
+    "avoided": "avoided",
+    "relapseInsight_one": "{{count}} relapse recorded. ",
+    "relapseInsight_other": "{{count}} relapses recorded. ",
+    "relapseInsightSuffix": "Even so, you avoided {{rate}}% of the cigarettes you would have smoked. That is real progress.",
+    "totalSaved": "Total saved",
+    "totalJourney": "Total journey",
+    "cravingsWon": "Cravings beaten",
+    "weekdays": {
+      "Dom": "Sun",
+      "Seg": "Mon",
+      "Ter": "Tue",
+      "Qua": "Wed",
+      "Qui": "Thu",
+      "Sex": "Fri",
+      "Sáb": "Sat"
+    }
+  },
+  "settings": {
+    "title": "Profile",
+    "journey": "JOURNEY",
+    "quitDate": "Quit smoking on",
+    "consumption": "CONSUMPTION",
+    "cigsPerDay": "Cigarettes per day",
+    "cigsPerDayValue": "{{count}} cigarettes",
+    "pricePerPack": "Pack price",
+    "pricePerPackValue": "$ {{price}}",
+    "cigsPerPack": "Cigarettes per pack",
+    "cigsPerPackValue": "{{count}} cigarettes",
+    "notifications": "NOTIFICATIONS",
+    "dailyMotivation": "Daily motivation",
+    "dailyAt": "Every day at 9am",
+    "achievements": "ACHIEVEMENTS",
+    "achievementCategories": {
+      "TEMPO": "TIME",
+      "ECONOMIA": "SAVINGS",
+      "DIÁRIO": "DIARY"
+    },
+    "logout": "Sign out",
+    "logoutTitle": "Sign out",
+    "logoutMessage": "Your diary and progress are saved. If you sign in again, everything will be here.",
+    "logoutCancel": "Cancel",
+    "logoutConfirm": "Sign out",
+    "language": "LANGUAGE"
+  },
+  "sos": {
+    "difficultMoment": "DIFFICULT MOMENT",
+    "title": "It will pass.\nChoose how\nto hold on:",
+    "subtitle": "Cravings last, on average, 3 minutes. Let's get through this together.",
+    "breathe": "Breathe",
+    "breatheSubtitle": "4-7-8 technique · 3 cycles",
+    "wait": "Wait 3 min",
+    "waitSubtitle": "Guided timer · The craving fades",
+    "record": "Record the moment",
+    "recordSubtitle": "How are you feeling right now?",
+    "alreadyPassed": "Already passed? Back to the app",
+    "breathePhases": {
+      "inspire": "Inhale",
+      "hold": "Hold",
+      "expire": "Exhale",
+      "inspireInstruction": "Breathe in deeply through your nose...",
+      "holdInstruction": "Hold the breath calmly...",
+      "expireInstruction": "Release slowly through your mouth..."
+    },
+    "cycle": "Cycle {{current}} of {{total}}",
+    "breatheDone": "Well done!",
+    "breatheDoneSub": "You completed all 3 cycles.\nHow are you feeling?",
+    "back": "Back",
+    "backArrow": "← Back",
+    "holdOn": "HOLD ON",
+    "waitMsg1": "Breathe deeply. You are in control.",
+    "waitMsg2": "1 minute has passed. Stay strong.",
+    "waitMsg3": "Almost there. The craving is fading.",
+    "waitMsg4": "You resisted! The craving passed. 💪",
+    "waitDoneTitle": "You resisted!",
+    "waitDoneSub": "The craving passed.\nYou are stronger than it.",
+    "recordTitle": "Record craving",
+    "recordIntensity": "INTENSITY",
+    "recordTrigger": "TRIGGER",
+    "recordResult": "RESULT",
+    "recordResisted": "✓ Resisted",
+    "recordCeded": "✕ Gave in",
+    "recordHowAreYou": "HOW ARE YOU FEELING (OPTIONAL)",
+    "recordNotesPh": "Describe how you're feeling right now...",
+    "recordSave": "Save entry",
+    "savedResisted": "Great entry!",
+    "savedCeded": "Honesty counts.",
+    "savedResistedSub": "You resisted. Keep it up!",
+    "savedCededSub": "Note what happened and move forward.",
+    "quickTriggers": {
+      "Estresse": "Stress",
+      "Tédio": "Boredom",
+      "Ansiedade": "Anxiety",
+      "Social": "Social",
+      "Trabalho": "Work"
+    }
+  },
+  "relapse": {
+    "title": "It happens.\nDon't give up.",
+    "subtitle": "A relapse doesn't erase the progress you've already made. What matters is what you decide now.",
+    "howMany": "HOW MANY CIGARETTES DID YOU SMOKE?",
+    "resetCounter": "Reset my counter",
+    "resetSubtitle": "I want to start over honestly",
+    "continueJourney": "It was just a slip and I continue",
+    "continueSubtitle": "Record the moment but keep my date",
+    "footnote": "Whatever your choice, we are here with you. ❤️",
+    "confirmReset": "Are you sure?",
+    "confirmResetSub": "Your counter will reset and restart from today. Your history and diary remain saved.",
+    "yesReset": "Yes, reset",
+    "goBack": "Back",
+    "recorded": "Recorded.",
+    "recordedSub": "Your relapse has been noted in the history. Your quit date stays the same. Keep going!",
+    "continueMyJourney": "Continue my journey"
+  },
+  "onboarding": {
+    "welcome": {
+      "headline": "Breathe again.\n",
+      "headlineGreen": "Live more.",
+      "subtitle": "Your journey to quit smoking starts with one step. We walk with you.",
+      "start": "Start now",
+      "alreadyHaveAccount": "Already have an account · ",
+      "login": "Sign in"
+    },
+    "profile": {
+      "title": "Let's get to know you",
+      "subtitle": "Your data stays only on your device and helps personalize your experience.",
+      "nameLabel": "YOUR NAME",
+      "namePh": "What should we call you?",
+      "emailLabel": "E-MAIL",
+      "emailPh": "your@email.com",
+      "privacy": "🔒 Your data is never shared with third parties.",
+      "continueBtn": "Continue →",
+      "nameError": "Please enter your name",
+      "emailError": "Invalid email"
+    },
+    "when": {
+      "title": "When did you quit?",
+      "subtitle": "This date is the starting point for everything. It can even be today!",
+      "fieldLabel": "DATE",
+      "tapToChange": "Tap to change",
+      "previewLabel": "✓ I quit smoking on:",
+      "infoText": "🎯 If you quit a while ago, put in the real date. Your milestones and metrics will be calculated from there.",
+      "continueBtn": "Continue →"
+    },
+    "consumption": {
+      "title": "Tell us about your consumption",
+      "subtitle": "We'll use this to calculate your savings and health progress.",
+      "cigsPerDay": "CIGARETTES PER DAY",
+      "packPrice": "PACK PRICE",
+      "cigsPerPack": "CIGARETTES PER PACK",
+      "cigUnit": "cig",
+      "calcText": "✦ You spend about ",
+      "calcMonth": "$ {{amount}}/month",
+      "calcYearSuffix": " on cigarettes. In 1 year that is ",
+      "calcYear": "$ {{amount}}.",
+      "continueBtn": "Continue →"
+    },
+    "triggers": {
+      "title": "What are your triggers?",
+      "subtitle": "Select the situations that most make you want to smoke. This helps us support you at the right moments.",
+      "startBtn": "Start my journey →",
+      "items": {
+        "stress": "😤 Stress",
+        "coffee": "☕ Coffee",
+        "alcohol": "🍺 Alcohol",
+        "meal": "🍽 After meal",
+        "boredom": "😴 Boredom",
+        "social": "👥 Social",
+        "work": "💼 Work",
+        "anxiety": "😰 Anxiety"
+      }
+    }
+  },
+  "achievements": {
+    "h12": { "title": "First Night", "desc": "12 hours smoke-free" },
+    "h24": { "title": "First Dawn", "desc": "24 hours smoke-free" },
+    "d2": { "title": "Two Days Strong", "desc": "2 days smoke-free" },
+    "d3": { "title": "Three Days Strong", "desc": "3 days smoke-free" },
+    "w1": { "title": "One Week", "desc": "7 days smoke-free" },
+    "w2": { "title": "Fifteen Days", "desc": "15 days smoke-free" },
+    "m1": { "title": "One Month Free", "desc": "30 days smoke-free" },
+    "m2": { "title": "Two Months Free", "desc": "60 days smoke-free" },
+    "m3": { "title": "Ninety Days", "desc": "90 days smoke-free" },
+    "m6": { "title": "Half a Year", "desc": "180 days smoke-free" },
+    "y1": { "title": "One Year", "desc": "365 days smoke-free" },
+    "y2": { "title": "Two Years of New Life", "desc": "2 years smoke-free" },
+    "y5": { "title": "Five Years Free", "desc": "5 years smoke-free" },
+    "cig10": { "title": "First Ten", "desc": "10 cigarettes not smoked" },
+    "cig50": { "title": "Half a Pack", "desc": "50 cigarettes not smoked" },
+    "cig100": { "title": "One Hundred", "desc": "100 cigarettes not smoked" },
+    "cig200": { "title": "Two Hundred and Counting", "desc": "200 cigarettes not smoked" },
+    "cig500": { "title": "Five Hundred", "desc": "500 cigarettes not smoked" },
+    "cig1000": { "title": "One Thousand", "desc": "1000 cigarettes not smoked" },
+    "r20": { "title": "First Savings", "desc": "$20 saved" },
+    "r50": { "title": "Fifty Saved", "desc": "$50 saved" },
+    "r100": { "title": "One Hundred Saved", "desc": "$100 saved" },
+    "r200": { "title": "Two Hundred Saved", "desc": "$200 saved" },
+    "r500": { "title": "Real Savings", "desc": "$500 saved" },
+    "r1000": { "title": "Four Digits", "desc": "$1,000 saved" },
+    "r2000": { "title": "Real Investment", "desc": "$2,000 saved" },
+    "res1": { "title": "First Victory", "desc": "First craving beaten" },
+    "res5": { "title": "Five Victories", "desc": "5 cravings beaten" },
+    "res10": { "title": "Guardian", "desc": "10 cravings beaten" },
+    "res25": { "title": "Veteran", "desc": "25 cravings beaten" },
+    "res50": { "title": "Resistance Master", "desc": "50 cravings beaten" },
+    "res100": { "title": "Invincible", "desc": "100 cravings beaten" },
+    "diary1": { "title": "First Entry", "desc": "First diary entry" },
+    "diary5": { "title": "Chronicler", "desc": "5 diary entries" },
+    "diary10": { "title": "Ten Entries", "desc": "10 diary entries" },
+    "diary20": { "title": "Faithful Diary", "desc": "20 diary entries" },
+    "diary50": { "title": "Faithful Chronicler", "desc": "50 diary entries" }
+  },
+  "notifications": {
+    "daily": {
+      "title": "Libre 🌿",
+      "messages": [
+        "Another day building your best self. You can do it! 💪",
+        "Every hour without smoking is a victory. Keep it up! 🌱",
+        "Your body is thanking you right now. ❤️",
+        "Today is another day of freedom. You chose well! ✨",
+        "You are stronger than the craving. Remember that! 🛡️",
+        "Every cigarette not smoked is a gift to yourself. 🎁",
+        "Breathe deeply. You are on the right path. 🫁"
+      ]
+    },
+    "milestone": {
+      "title": "Milestone approaching: {{label}} 🎯"
+    },
+    "craving": {
+      "title": "You usually crave now 🫁",
+      "body": "How about doing a breathing exercise first? You are ready!"
+    }
+  },
+  "quotes": [
+    "The craving lasts minutes. Freedom lasts forever.",
+    "You are not losing something. You are gaining your health back.",
+    "Every cigarette not smoked is a victory over addiction.",
+    "When the urge hits, remember: you are stronger than it.",
+    "Your future thanks you for every hour you resist.",
+    "It's not about perfection. It's about persistence.",
+    "Nicotine lies. It tells you that you need it. That's not true.",
+    "The urge passes in 3 to 5 minutes. Breathe deeply and wait.",
+    "You are rewriting your story, paragraph by paragraph.",
+    "Every morning without a cigarette is a morning with cleaner lungs.",
+    "Difficult days exist. But you have gotten through all of them so far.",
+    "The craving is strong. You are stronger.",
+    "One step at a time. One day at a time. That is enough.",
+    "The money you saved tells a story of choice.",
+    "Smoking was a habit. Not smoking is who you are becoming.",
+    "Breathe. This cleaner air is yours by right.",
+    "The urge passes. The pride of having resisted stays.",
+    "There is no such thing as just one cigarette. There is your freedom or going back to the start.",
+    "You are proving, every hour, that you can do it.",
+    "Your heart pumps cleaner blood today than yesterday.",
+    "Every meal you taste more fully is a gift from the addiction you beat.",
+    "You are not a smoker who quit. You are a free person.",
+    "With every craving beaten, you become a little more free.",
+    "Today you chose yourself. That matters more than it seems.",
+    "Your body is smarter than the addiction. Give it time.",
+    "Taking care of yourself starts with the decision you already made.",
+    "Freedom is not the absence of desire. It is choosing not to give in to it.",
+    "Every hour counts. Every day counts. Every choice counts.",
+    "You deserve a life without depending on anything to feel good.",
+    "Cigarettes promised to relieve stress. You found better ways."
+  ]
+}

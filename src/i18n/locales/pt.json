@@ -1,0 +1,467 @@
+{
+  "tabs": {
+    "home": "Home",
+    "health": "Saúde",
+    "stats": "Stats",
+    "diary": "Diário",
+    "settings": "Perfil"
+  },
+  "home": {
+    "smokeFree": "SEM FUMAR",
+    "streakActive": "🔥 Sequência ativa",
+    "greeting": "Olá, {{name}} 👋",
+    "hours": "horas",
+    "minutes": "minutos",
+    "seconds": "segundos",
+    "days": "dias",
+    "cigsNotSmoked": "cigarros não fumados",
+    "saved": "economizados",
+    "lifeRegained": "de vida recuperados",
+    "tarAvoided": "de alcatrão evitados",
+    "nextAchievement": "PRÓXIMA CONQUISTA",
+    "remaining": "faltam {{label}}",
+    "achievementUnlocked": "Conquista desbloqueada!",
+    "incredibleBtn": "Incrível! 🎉",
+    "quoteSection": "Frase do dia",
+    "thisWeek": "ESTA SEMANA",
+    "cravingsRegistered": "fissuras\nregistradas",
+    "resistanceRate": "taxa de\nresistência",
+    "mostCommonTrigger": "gatilho\nmais comum",
+    "healthMilestones": "MARCOS DE SAÚDE",
+    "viewHealthProgress": "Ver seu progresso de saúde →",
+    "sosButton": "🚨 Tô com vontade de fumar",
+    "relapses_one": "{{count}} recaída registrada",
+    "relapses_other": "{{count}} recaídas registradas",
+    "timeLeft_hours_one": "{{count}}h restante",
+    "timeLeft_hours_other": "{{count}}h restantes",
+    "timeLeft_days_one": "{{count}} dia",
+    "timeLeft_days_other": "{{count}} dias",
+    "timeLeft_cigarettes_one": "{{count}} cigarro",
+    "timeLeft_cigarettes_other": "{{count}} cigarros",
+    "timeLeft_cravings_one": "{{count}} fissura vencida",
+    "timeLeft_cravings_other": "{{count}} fissuras vencidas",
+    "timeLeft_entries_one": "{{count}} registro",
+    "timeLeft_entries_other": "{{count}} registros",
+    "timeLeft_money": "R$ {{amount}}",
+    "timeSteps": {
+      "h12": "Primeira Noite",
+      "h24": "Primeiro Amanhecer",
+      "d2": "Dois Dias de Força",
+      "d3": "Três Dias Forte",
+      "w1": "Uma Semana",
+      "w2": "Quinze Dias",
+      "m1": "Um Mês Livre",
+      "m2": "Dois Meses Livre",
+      "m3": "Noventa Dias",
+      "m6": "Meio Ano",
+      "y1": "Um Ano",
+      "y2": "Dois Anos de Vida Nova",
+      "y5": "Cinco Anos Livre"
+    }
+  },
+  "health": {
+    "title": "Marcos de saúde",
+    "subtitle": "{{done}} de {{total}} conquistados · cada dia conta.",
+    "overallProgress": "Progresso geral",
+    "achieved": "CONQUISTADO",
+    "inMin": "EM {{n}} MIN",
+    "inHours": "EM {{n}} HORAS",
+    "inDays": "EM {{n}} DIAS",
+    "milestones": {
+      "20min": {
+        "time": "20 minutos",
+        "description": "Pressão arterial e frequência cardíaca caem para níveis normais. A circulação nas mãos e pés já melhora."
+      },
+      "8h": {
+        "time": "8 horas",
+        "description": "Níveis de nicotina e monóxido de carbono no sangue caem pela metade. O oxigênio no sangue começa a se normalizar."
+      },
+      "12h": {
+        "time": "12 horas",
+        "description": "Monóxido de carbono completamente eliminado do sangue. Todas as células do corpo recebem mais oxigênio."
+      },
+      "24h": {
+        "time": "24 horas",
+        "description": "O risco de ataque cardíaco já começa a diminuir. Ansiedade e irritabilidade do início da abstinência tendem a passar."
+      },
+      "48h": {
+        "time": "48 horas",
+        "description": "Terminações nervosas danificadas pelo tabaco iniciam a recuperação. Olfato e paladar ficam nitidamente mais aguçados."
+      },
+      "3d": {
+        "time": "3 dias",
+        "description": "Nicotina completamente eliminada do corpo. Brônquios relaxam — respirar fica visivelmente mais fácil. Energia aumenta."
+      },
+      "1w": {
+        "time": "1 semana",
+        "description": "O sangue está menos viscoso. Circulação periférica melhora — mãos e pés ficam mais quentes. Pele mais oxigenada."
+      },
+      "2w": {
+        "time": "2 semanas",
+        "description": "Circulação melhora sensivelmente e a capacidade pulmonar pode aumentar até 30%. Exercício físico fica mais fácil."
+      },
+      "3w": {
+        "time": "3 semanas",
+        "description": "Circulação nos membros estabiliza. Caminhar longas distâncias sem se cansar tanto já é perceptível."
+      },
+      "1m": {
+        "time": "1 mês",
+        "description": "Cílios pulmonares começam a se regenerar. Tosse produtiva diminui, o pulmão se limpa com mais eficiência."
+      },
+      "3m": {
+        "time": "3 meses",
+        "description": "Circulação sanguínea substancialmente melhorada. Risco de trombose diminui. Função pulmonar continua ganhando."
+      },
+      "6m": {
+        "time": "6 meses",
+        "description": "Cílios pulmonares totalmente regenerados — muco e resíduos são removidos normalmente. Chiado e falta de ar reduzem muito."
+      },
+      "9m": {
+        "time": "9 meses",
+        "description": "Pulmões quase completamente recuperados. Infecções respiratórias (bronquite, gripe) passam a ser muito menos frequentes."
+      },
+      "1y": {
+        "time": "1 ano",
+        "description": "Risco de doença cardíaca coronária cai em 50% comparado a um fumante ativo. Um marco científico extraordinário."
+      },
+      "2y": {
+        "time": "2 anos",
+        "description": "Risco de ataque cardíaco se aproxima do de quem nunca fumou. Artérias coronárias funcionam como as de um não-fumante."
+      },
+      "5y": {
+        "time": "5 anos",
+        "description": "Risco de AVC reduz para o nível de não-fumantes. Risco de cânceres de boca e garganta também cai à metade."
+      },
+      "10y": {
+        "time": "10 anos",
+        "description": "Risco de câncer de pulmão cai à metade. Risco de cânceres de laringe, esôfago e bexiga também diminuem significativamente."
+      },
+      "15y": {
+        "time": "15 anos",
+        "description": "Risco de doença cardíaca coronária igual ao de quem nunca fumou. 15 anos de escolhas que mudaram tudo."
+      },
+      "20y": {
+        "time": "20 anos",
+        "description": "Risco de cânceres de pâncreas, rim, bexiga e esôfago equivale ao de não-fumantes. Você transformou sua saúde completamente."
+      }
+    }
+  },
+  "diary": {
+    "title": "Diário",
+    "subtitle_one": "{{count}} registro · {{won}} fissuras vencidas",
+    "subtitle_other": "{{count}} registros · {{won}} fissuras vencidas",
+    "noEntries": "Nenhum registro ainda",
+    "emptyTitle": "Ainda não há registros",
+    "emptyText": "Quando sentir vontade de fumar, registre aqui. Isso ajuda a entender seus padrões.",
+    "today": "Hoje",
+    "yesterday": "Ontem",
+    "resisted": "✓ Resisti",
+    "ceded": "✕ Cedi",
+    "trigger": "Gatilho:",
+    "intensity": "Intensidade:",
+    "cigarettesSmoked": "Cigarros fumados:",
+    "modal": {
+      "title": "Registrar fissura",
+      "intensity": "INTENSIDADE",
+      "trigger": "GATILHO",
+      "result": "RESULTADO",
+      "resisted": "✓ Resisti",
+      "ceded": "✕ Cedi",
+      "howAreYou": "COMO VOCÊ ESTÁ SE SENTINDO (OPCIONAL)",
+      "notesPh": "Descreva o que está sentindo neste momento...",
+      "howManyCigs": "Quantos cigarros você fumou?",
+      "save": "Salvar registro"
+    },
+    "triggers": {
+      "Estresse": "Estresse",
+      "Café": "Café",
+      "Álcool": "Álcool",
+      "Pós-refeição": "Pós-refeição",
+      "Tédio": "Tédio",
+      "Social": "Social",
+      "Trabalho": "Trabalho",
+      "Ansiedade": "Ansiedade"
+    }
+  },
+  "stats": {
+    "title": "Estatísticas",
+    "last7days": "Últimos 7 dias",
+    "last30days": "Últimos 30 dias",
+    "lastYear": "Último ano",
+    "accumulatedSavings": "ECONOMIA ACUMULADA",
+    "todaySavings": "+ R$ {{amount}} hoje",
+    "fewData": "Poucos dados ainda — continue assim!",
+    "cravingsByWeekday": "FISSURAS POR DIA DA SEMANA",
+    "hardestDay": "{{day}} é o dia mais difícil — fique atento.",
+    "noCravings": "Sem fissuras registradas neste período.",
+    "relapses": "RECAÍDAS E REDUÇÃO DE DANOS",
+    "register": "+ Registrar",
+    "noRelapses": "Nenhuma recaída registrada. Continue assim! 🌟",
+    "cravingsCeded_one": "{{count}} fissura cedida",
+    "cravingsCeded_other": "{{count}} fissuras cedidas",
+    "cigsSmoked": "cigarros fumados",
+    "avoided": "evitados",
+    "relapseInsight_one": "{{count}} recaída registrada. ",
+    "relapseInsight_other": "{{count}} recaídas registradas. ",
+    "relapseInsightSuffix": "Mesmo assim, você evitou {{rate}}% dos cigarros que fumaria. Isso é progresso real.",
+    "totalSaved": "Total economizado",
+    "totalJourney": "Jornada total",
+    "cravingsWon": "Fissuras vencidas",
+    "weekdays": {
+      "Dom": "Dom",
+      "Seg": "Seg",
+      "Ter": "Ter",
+      "Qua": "Qua",
+      "Qui": "Qui",
+      "Sex": "Sex",
+      "Sáb": "Sáb"
+    }
+  },
+  "settings": {
+    "title": "Perfil",
+    "journey": "JORNADA",
+    "quitDate": "Parou de fumar em",
+    "consumption": "CONSUMO",
+    "cigsPerDay": "Cigarros por dia",
+    "cigsPerDayValue": "{{count}} cigarros",
+    "pricePerPack": "Preço por maço",
+    "pricePerPackValue": "R$ {{price}}",
+    "cigsPerPack": "Cigarros por maço",
+    "cigsPerPackValue": "{{count}} cigarros",
+    "notifications": "NOTIFICAÇÕES",
+    "dailyMotivation": "Motivação diária",
+    "dailyAt": "Todos os dias às 9h",
+    "achievements": "CONQUISTAS",
+    "achievementCategories": {
+      "TEMPO": "TEMPO",
+      "ECONOMIA": "ECONOMIA",
+      "DIÁRIO": "DIÁRIO"
+    },
+    "logout": "Sair da conta",
+    "logoutTitle": "Sair do app",
+    "logoutMessage": "Seu diário e progresso ficam salvos. Se entrar novamente, tudo estará aqui.",
+    "logoutCancel": "Cancelar",
+    "logoutConfirm": "Sair",
+    "language": "IDIOMA"
+  },
+  "sos": {
+    "difficultMoment": "MOMENTO DIFÍCIL",
+    "title": "Vai passar.\nEscolha como\naguentar:",
+    "subtitle": "A fissura dura, em média, 3 minutos. Vamos passar por isso juntos.",
+    "breathe": "Respirar",
+    "breatheSubtitle": "Técnica 4-7-8 · 3 ciclos",
+    "wait": "Esperar 3 min",
+    "waitSubtitle": "Timer guiado · A fissura some",
+    "record": "Registrar o momento",
+    "recordSubtitle": "O que está sentindo agora?",
+    "alreadyPassed": "Já passou? Voltar para o app",
+    "breathePhases": {
+      "inspire": "Inspire",
+      "hold": "Segure",
+      "expire": "Expire",
+      "inspireInstruction": "Respire fundo pelo nariz...",
+      "holdInstruction": "Segure o ar com calma...",
+      "expireInstruction": "Solte lentamente pela boca..."
+    },
+    "cycle": "Ciclo {{current}} de {{total}}",
+    "breatheDone": "Muito bem!",
+    "breatheDoneSub": "Você completou os 3 ciclos.\nComo está se sentindo?",
+    "back": "Voltar",
+    "backArrow": "← Voltar",
+    "holdOn": "AGUENTE FIRME",
+    "waitMsg1": "Respira fundo. Você está no controle.",
+    "waitMsg2": "Já passou 1 minuto. Continue firme.",
+    "waitMsg3": "Quase lá. A fissura está passando.",
+    "waitMsg4": "Você resistiu! A fissura passou. 💪",
+    "waitDoneTitle": "Você resistiu!",
+    "waitDoneSub": "A fissura passou.\nVocê é mais forte do que ela.",
+    "recordTitle": "Registrar fissura",
+    "recordIntensity": "INTENSIDADE",
+    "recordTrigger": "GATILHO",
+    "recordResult": "RESULTADO",
+    "recordResisted": "✓ Resisti",
+    "recordCeded": "✕ Cedi",
+    "recordHowAreYou": "COMO VOCÊ ESTÁ SE SENTINDO (OPCIONAL)",
+    "recordNotesPh": "Descreva o que está sentindo neste momento...",
+    "recordSave": "Salvar registro",
+    "savedResisted": "Ótimo registro!",
+    "savedCeded": "Honestidade conta.",
+    "savedResistedSub": "Você resistiu. Continue assim!",
+    "savedCededSub": "Anote o que aconteceu e siga em frente.",
+    "quickTriggers": {
+      "Estresse": "Estresse",
+      "Tédio": "Tédio",
+      "Ansiedade": "Ansiedade",
+      "Social": "Social",
+      "Trabalho": "Trabalho"
+    }
+  },
+  "relapse": {
+    "title": "Faz parte.\nNão desista.",
+    "subtitle": "Uma recaída não apaga o progresso que você já fez. O que importa é o que você decide agora.",
+    "howMany": "QUANTOS CIGARROS VOCÊ FUMOU?",
+    "resetCounter": "Resetar meu contador",
+    "resetSubtitle": "Quero recomeçar do zero com honestidade",
+    "continueJourney": "Foi só um deslize e continuo",
+    "continueSubtitle": "Registro o momento mas mantenho minha data",
+    "footnote": "Seja qual for sua escolha, estamos aqui com você. ❤️",
+    "confirmReset": "Tem certeza?",
+    "confirmResetSub": "Seu contador vai zerar e recomeçar a partir de hoje. Seu histórico e diário ficam salvos.",
+    "yesReset": "Sim, resetar",
+    "goBack": "Voltar",
+    "recorded": "Registrado.",
+    "recordedSub": "Sua recaída ficou anotada no histórico. Sua data de parada continua a mesma. Siga em frente!",
+    "continueMyJourney": "Continuar minha jornada"
+  },
+  "onboarding": {
+    "welcome": {
+      "headline": "Respire de novo.\n",
+      "headlineGreen": "Viva mais.",
+      "subtitle": "Sua jornada para deixar o cigarro começa com um passo. A gente caminha com você.",
+      "start": "Começar agora",
+      "alreadyHaveAccount": "Já tenho conta · ",
+      "login": "Entrar"
+    },
+    "profile": {
+      "title": "Vamos nos conhecer",
+      "subtitle": "Seus dados ficam só no seu dispositivo e ajudam a personalizar sua experiência.",
+      "nameLabel": "SEU NOME",
+      "namePh": "Como quer ser chamado?",
+      "emailLabel": "E-MAIL",
+      "emailPh": "seu@email.com",
+      "privacy": "🔒 Seus dados nunca são compartilhados com terceiros.",
+      "continueBtn": "Continuar →",
+      "nameError": "Informe seu nome",
+      "emailError": "E-mail inválido"
+    },
+    "when": {
+      "title": "Quando você parou?",
+      "subtitle": "Essa data é o ponto de partida de tudo. Pode ser hoje mesmo!",
+      "fieldLabel": "DATA",
+      "tapToChange": "Toque para alterar",
+      "previewLabel": "✓ Parei de fumar em:",
+      "infoText": "🎯 Se você parou há mais tempo, coloque a data real. Seus marcos e métricas serão calculados a partir daí.",
+      "continueBtn": "Continuar →"
+    },
+    "consumption": {
+      "title": "Conte sobre seu consumo",
+      "subtitle": "Vamos usar isso para calcular sua economia e progresso de saúde.",
+      "cigsPerDay": "CIGARROS POR DIA",
+      "packPrice": "PREÇO DO MAÇO",
+      "cigsPerPack": "CIGARROS POR MAÇO",
+      "cigUnit": "cig",
+      "calcText": "✦ Você gasta cerca de ",
+      "calcMonth": "R$ {{amount}}/mês",
+      "calcYearSuffix": " com cigarro. Em 1 ano isso é ",
+      "calcYear": "R$ {{amount}}.",
+      "continueBtn": "Continuar →"
+    },
+    "triggers": {
+      "title": "Quais são seus gatilhos?",
+      "subtitle": "Selecione as situações que mais te fazem querer fumar. Isso nos ajuda a apoiar você nos momentos certos.",
+      "startBtn": "Começar minha jornada →",
+      "items": {
+        "stress": "😤 Estresse",
+        "coffee": "☕ Café",
+        "alcohol": "🍺 Álcool",
+        "meal": "🍽 Pós-refeição",
+        "boredom": "😴 Tédio",
+        "social": "👥 Social",
+        "work": "💼 Trabalho",
+        "anxiety": "😰 Ansiedade"
+      }
+    }
+  },
+  "achievements": {
+    "h12": { "title": "Primeira Noite", "desc": "12 horas sem fumar" },
+    "h24": { "title": "Primeiro Amanhecer", "desc": "24 horas sem fumar" },
+    "d2": { "title": "Dois Dias de Força", "desc": "2 dias sem fumar" },
+    "d3": { "title": "Três Dias Forte", "desc": "3 dias sem fumar" },
+    "w1": { "title": "Uma Semana", "desc": "7 dias sem fumar" },
+    "w2": { "title": "Quinze Dias", "desc": "15 dias sem fumar" },
+    "m1": { "title": "Um Mês Livre", "desc": "30 dias sem fumar" },
+    "m2": { "title": "Dois Meses Livre", "desc": "60 dias sem fumar" },
+    "m3": { "title": "Noventa Dias", "desc": "90 dias sem fumar" },
+    "m6": { "title": "Meio Ano", "desc": "180 dias sem fumar" },
+    "y1": { "title": "Um Ano", "desc": "365 dias sem fumar" },
+    "y2": { "title": "Dois Anos de Vida Nova", "desc": "2 anos sem fumar" },
+    "y5": { "title": "Cinco Anos Livre", "desc": "5 anos sem fumar" },
+    "cig10": { "title": "Primeiros Dez", "desc": "10 cigarros não fumados" },
+    "cig50": { "title": "Meio Maço", "desc": "50 cigarros não fumados" },
+    "cig100": { "title": "Centena", "desc": "100 cigarros não fumados" },
+    "cig200": { "title": "Duzentos e Contando", "desc": "200 cigarros não fumados" },
+    "cig500": { "title": "Quinhentos", "desc": "500 cigarros não fumados" },
+    "cig1000": { "title": "Um Milhar", "desc": "1000 cigarros não fumados" },
+    "r20": { "title": "Primeiro Dinheiro", "desc": "R$20 economizados" },
+    "r50": { "title": "Cinquenta Reais", "desc": "R$50 economizados" },
+    "r100": { "title": "Uma Nota", "desc": "R$100 economizados" },
+    "r200": { "title": "Duzentos Economizados", "desc": "R$200 economizados" },
+    "r500": { "title": "Poupança Real", "desc": "R$500 economizados" },
+    "r1000": { "title": "Quatro Dígitos", "desc": "R$1.000 economizados" },
+    "r2000": { "title": "Investimento Real", "desc": "R$2.000 economizados" },
+    "res1": { "title": "Primeira Vitória", "desc": "Primeira fissura vencida" },
+    "res5": { "title": "Cinco Vitórias", "desc": "5 fissuras vencidas" },
+    "res10": { "title": "Guardião", "desc": "10 fissuras vencidas" },
+    "res25": { "title": "Veterano", "desc": "25 fissuras vencidas" },
+    "res50": { "title": "Mestre da Resistência", "desc": "50 fissuras vencidas" },
+    "res100": { "title": "Invencível", "desc": "100 fissuras vencidas" },
+    "diary1": { "title": "Primeiro Registro", "desc": "Primeiro registro no diário" },
+    "diary5": { "title": "Cronista", "desc": "5 registros no diário" },
+    "diary10": { "title": "Dez Registros", "desc": "10 registros no diário" },
+    "diary20": { "title": "Diário Fiel", "desc": "20 registros no diário" },
+    "diary50": { "title": "Cronista Fiel", "desc": "50 registros no diário" }
+  },
+  "notifications": {
+    "daily": {
+      "title": "Libre 🌿",
+      "messages": [
+        "Mais um dia construindo sua melhor versão. Você consegue! 💪",
+        "Cada hora sem fumar é uma vitória. Continue assim! 🌱",
+        "Seu corpo está te agradecendo agora mesmo. ❤️",
+        "Hoje é mais um dia de liberdade. Você escolheu bem! ✨",
+        "Você é mais forte do que a fissura. Lembre disso! 🛡️",
+        "Cada cigarro não fumado é um presente para você mesmo. 🎁",
+        "Respira fundo. Você está no caminho certo. 🫁"
+      ]
+    },
+    "milestone": {
+      "title": "Marco próximo: {{label}} 🎯"
+    },
+    "craving": {
+      "title": "Você costuma sentir fissura agora 🫁",
+      "body": "Que tal fazer um exercício de respiração antes? Você está preparado!"
+    }
+  },
+  "quotes": [
+    "A fissura dura minutos. A liberdade dura para sempre.",
+    "Você não está perdendo algo. Está ganhando sua saúde de volta.",
+    "Cada cigarro não fumado é uma vitória sobre o vício.",
+    "Quando bater a vontade, lembre: você é mais forte que ela.",
+    "Seu futuro agradece cada hora que você resiste.",
+    "Não é sobre perfeição. É sobre persistência.",
+    "A nicotina mente. Ela diz que você precisa dela. Não é verdade.",
+    "O desejo passa em 3 a 5 minutos. Respire fundo e espere.",
+    "Você está reescrevendo sua história, parágrafo a parágrafo.",
+    "Cada manhã sem cigarro é uma manhã de pulmões mais limpos.",
+    "Dias difíceis existem. Mas você já passou por todos eles até agora.",
+    "A fissura é forte. Você é mais forte.",
+    "Um passo de cada vez. Um dia de cada vez. Isso é suficiente.",
+    "O dinheiro que você economizou conta uma história de escolha.",
+    "Fumar era um hábito. Não fumar é quem você está se tornando.",
+    "Respire. Esse ar mais limpo é seu por direito.",
+    "A vontade passa. O orgulho de ter resistido fica.",
+    "Não existe só um cigarro. Existe a sua liberdade ou o retorno ao início.",
+    "Você está provando, a cada hora, que consegue.",
+    "Seu coração bombeia sangue mais limpo hoje do que ontem.",
+    "Cada refeição que você saboreia mais é presente do vício que você venceu.",
+    "Você não é um fumante que parou. Você é uma pessoa livre.",
+    "A cada fissura vencida, você fica um pouco mais livre.",
+    "Hoje você escolheu você. Isso importa mais do que parece.",
+    "Seu corpo é mais inteligente que o vício. Dê a ele tempo.",
+    "Cuidar de si mesmo começa com a decisão que você já tomou.",
+    "A liberdade não é a ausência de desejo. É escolher não ceder a ele.",
+    "Cada hora conta. Cada dia conta. Cada escolha conta.",
+    "Você merece uma vida sem depender de nada para se sentir bem.",
+    "O cigarro prometia aliviar o estresse. Você encontrou caminhos melhores."
+  ]
+}
