@@ -12,12 +12,7 @@
       "distribution": "internal"
     },
     "production": {
-      "autoIncrement": true,
-      "android": {
-        "buildType": "app-bundle",
-        "enableProguardInReleaseBuilds": true,
-        "extraProguardRules": "-keepattributes SourceFile,LineNumberTable"
-      }
+      "autoIncrement": true
     }
   },
   "submit": {
