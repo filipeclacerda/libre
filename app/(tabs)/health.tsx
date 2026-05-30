@@ -3,6 +3,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { useTranslation } from 'react-i18next';
 import { Colors } from '@/src/constants/colors';
 import { useUserStore } from '@/src/store/userStore';
+import { parseQuitDate } from '@/src/lib/dateUtils';
 
 // Fontes: American Cancer Society (ACS), NHS (UK), ASH (Action on Smoking and Health)
 const MILESTONE_DEFS = [
@@ -29,18 +30,10 @@ const MILESTONE_DEFS = [
 
 const SOON_THRESHOLD_MIN = 3 * 24 * 60; // 3 days
 
-function getQuitDateTime(quitDateStr: string): Date {
-  // ISO format (contains 'T') → exact timestamp saved when user quit today
-  // YYYY-MM-DD → past date, use midnight
-  if (quitDateStr.includes('T')) return new Date(quitDateStr);
-  const [y, m, d] = quitDateStr.split('-').map(Number);
-  return new Date(y, m - 1, d, 0, 0, 0);
-}
-
 export default function Health() {
   const { t } = useTranslation();
   const profile = useUserStore(s => s.profile);
-  const quitDate = getQuitDateTime(profile?.quitDate ?? new Date().toISOString().split('T')[0]);
+  const quitDate = parseQuitDate(profile?.quitDate ?? new Date().toISOString().split('T')[0]);
 
   const elapsedMin = (Date.now() - quitDate.getTime()) / 60000;
 

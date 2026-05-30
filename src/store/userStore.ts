@@ -1,12 +1,13 @@
 import { create } from 'zustand';
 import { persist, createJSONStorage } from 'zustand/middleware';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { serializeQuitDate } from '../lib/dateUtils';
 
 export interface UserProfile {
   name: string;
   email: string;
-  quitDate: string;      // YYYY-MM-DD — original quit date, never changes
-  streakStart?: string;  // YYYY-MM-DD — resets on relapse; defaults to quitDate
+  quitDate: string;      // ISO or YYYY-MM-DD — today → ISO with time; past → YYYY-MM-DD
+  streakStart?: string;  // same format as quitDate; resets on relapse
   cigarettesPerDay: number;
   pricePerPack: number;
   cigarettesPerPack: number;
@@ -60,12 +61,10 @@ export const useUserStore = create<UserStore>()(
         set(s => ({ relapses: [relapse, ...s.relapses] }));
 
         if (resetStreak) {
-          const today = new Date();
-          const yyyy = today.getFullYear();
-          const mm = String(today.getMonth() + 1).padStart(2, '0');
-          const dd = String(today.getDate()).padStart(2, '0');
           set(s => ({
-            profile: s.profile ? { ...s.profile, streakStart: `${yyyy}-${mm}-${dd}` } : null,
+            profile: s.profile
+              ? { ...s.profile, streakStart: serializeQuitDate(new Date()) }
+              : null,
           }));
         }
       },

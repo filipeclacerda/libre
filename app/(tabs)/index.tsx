@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useMemo } from 'react';
 import { View, Text, TouchableOpacity, ScrollView, StyleSheet, Modal, Pressable, useWindowDimensions } from 'react-native';
 import { router } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
@@ -10,16 +10,10 @@ import { useUserStore } from '@/src/store/userStore';
 import { useAchievementsStore } from '@/src/store/achievementsStore';
 import { useDiaryStore } from '@/src/store/diaryStore';
 import { ACHIEVEMENTS, getTranslatedAchievements } from '@/src/lib/achievements';
+import { parseQuitDate } from '@/src/lib/dateUtils';
 
 // ── Helpers ──────────────────────────────────────────────────────────────────
 
-function getQuitDateTime(str: string): Date {
-  // ISO format (contains 'T') → exact timestamp saved when user quit today
-  // YYYY-MM-DD → past date, use midnight
-  if (str.includes('T')) return new Date(str);
-  const [y, m, d] = str.split('-').map(Number);
-  return new Date(y, m - 1, d, 0, 0, 0);
-}
 
 function getElapsed(from: Date) {
   const ms = Math.max(0, Date.now() - from.getTime());
@@ -133,14 +127,14 @@ export default function Dashboard() {
   const profile = useUserStore(s => s.profile);
   const relapses = useUserStore(s => s.relapses);
   const entries = useDiaryStore(s => s.entries);
-  const { checkAndUnlock, pendingCelebration, dismissCelebration, unlocked } = useAchievementsStore();
+  const { checkAndUnlock, pendingCelebration, dismissCelebration, unlocked, hasHydrated } = useAchievementsStore();
 
   // Streak is calculated from streakStart (resets on relapse) or quitDate
   const streakDateStr = profile?.streakStart ?? profile?.quitDate ?? new Date().toISOString().split('T')[0];
   const quitDateStr   = profile?.quitDate ?? new Date().toISOString().split('T')[0];
 
-  const streakDate = getQuitDateTime(streakDateStr);
-  const quitDate   = getQuitDateTime(quitDateStr);
+  const streakDate = parseQuitDate(streakDateStr);
+  const quitDate   = parseQuitDate(quitDateStr);
 
   const [elapsed, setElapsed] = useState(() => getElapsed(streakDate));
 
@@ -183,12 +177,7 @@ export default function Dashboard() {
   const cravingsWon = entries.filter(e => e.resisted).length;
   const achievCtx: ACtx = { hoursSinceQuit, daysSinceQuit, cigarettesNotSmoked: netCigsNotSmoked, moneySaved, cravingsWon, diaryEntries: entries.length };
 
-  const ACHIEV_THRESHOLDS: Array<{
-    id: string;
-    get: (c: ACtx) => number;
-    target: number;
-    fmtLeft: (n: number) => string;
-  }> = [
+  const ACHIEV_THRESHOLDS = useMemo(() => [
     { id: 'h12',     get: c => c.hoursSinceQuit,      target: 12,    fmtLeft: n => t('home.timeLeft_hours', { count: n }) },
     { id: 'h24',     get: c => c.hoursSinceQuit,      target: 24,    fmtLeft: n => t('home.timeLeft_hours', { count: n }) },
     { id: 'd2',      get: c => c.daysSinceQuit,       target: 2,     fmtLeft: n => t('home.timeLeft_days', { count: n }) },
@@ -224,7 +213,8 @@ export default function Dashboard() {
     { id: 'diary10', get: c => c.diaryEntries,        target: 10,    fmtLeft: n => t('home.timeLeft_entries', { count: n }) },
     { id: 'diary20', get: c => c.diaryEntries,        target: 20,    fmtLeft: n => t('home.timeLeft_entries', { count: n }) },
     { id: 'diary50', get: c => c.diaryEntries,        target: 50,    fmtLeft: n => t('home.timeLeft_entries', { count: n }) },
-  ];
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  ], [i18n.language]); // only rebuild when language changes
 
   const translatedAchievements = getTranslatedAchievements(t);
 
@@ -257,7 +247,8 @@ export default function Dashboard() {
     return Object.entries(counts).sort((a, b) => b[1] - a[1])[0][0];
   })();
 
-  // Check achievements
+  // Check achievements — hasHydrated must be a dependency so this re-runs
+  // once AsyncStorage finishes loading, catching all past achievements.
   useEffect(() => {
     checkAndUnlock({
       hoursSinceQuit,
@@ -267,7 +258,7 @@ export default function Dashboard() {
       cravingsWon,
       diaryEntries: entries.length,
     });
-  }, [hoursSinceQuit, daysSinceQuit, netCigsNotSmoked, moneySaved, cravingsWon, entries.length]);
+  }, [hasHydrated, hoursSinceQuit, daysSinceQuit, netCigsNotSmoked, moneySaved, cravingsWon, entries.length]);
 
   const firstName = (profile?.name ?? 'você').split(' ')[0];
   const locale = i18n.language === 'en' ? 'en-US' : 'pt-BR';

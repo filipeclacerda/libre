@@ -7,6 +7,7 @@ import { useTranslation } from 'react-i18next';
 import { Colors } from '@/src/constants/colors';
 import { OnboardingHeader } from '@/components/ui/OnboardingHeader';
 import { useUserStore } from '@/src/store/userStore';
+import { serializeQuitDate } from '@/src/lib/dateUtils';
 
 export default function When() {
   const { t, i18n } = useTranslation();
@@ -26,19 +27,7 @@ export default function When() {
   }
 
   function handleContinue() {
-    const today = new Date();
-    const isToday =
-      date.getFullYear() === today.getFullYear() &&
-      date.getMonth()    === today.getMonth()    &&
-      date.getDate()     === today.getDate();
-
-    // If quitting today: save the exact current time so the counter starts now.
-    // If a past date: save YYYY-MM-DD (midnight) since we don't know the exact hour.
-    const quitDate = isToday
-      ? new Date().toISOString()
-      : `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;
-
-    setProfile({ quitDate });
+    setProfile({ quitDate: serializeQuitDate(date) });
     router.push('/(onboarding)/consumption');
   }
 
