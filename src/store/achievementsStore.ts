@@ -8,6 +8,9 @@ interface AchievementsStore {
   unlocked: Record<string, string>;
   /** Queue of ids to celebrate — drained one by one */
   pendingCelebration: string[];
+  /** True once AsyncStorage has finished loading persisted data */
+  hasHydrated: boolean;
+  setHasHydrated: (v: boolean) => void;
   checkAndUnlock: (ctx: AchievementContext) => void;
   dismissCelebration: () => void;
   reset: () => void;
@@ -18,8 +21,15 @@ export const useAchievementsStore = create<AchievementsStore>()(
     (set, get) => ({
       unlocked: {},
       pendingCelebration: [],
+      hasHydrated: false,
+      setHasHydrated: (v) => set({ hasHydrated: v }),
 
       checkAndUnlock: (ctx) => {
+        // Guard: never run before persisted data is loaded from AsyncStorage.
+        // Without this, unlocked is {} on first render and every achievement
+        // looks "new", causing all celebrations to fire on every app open.
+        if (!get().hasHydrated) return;
+
         const earned = getEarnedIds(ctx);
         const current = get().unlocked;
         const fresh = earned.filter(id => !current[id]);
@@ -44,9 +54,12 @@ export const useAchievementsStore = create<AchievementsStore>()(
     {
       name: 'libre-achievements',
       storage: createJSONStorage(() => AsyncStorage),
-      // pendingCelebration must NOT be persisted — celebrations should only
-      // appear once per session, not replay every time the app is reopened.
+      // pendingCelebration and hasHydrated must NOT be persisted.
       partialize: (state) => ({ unlocked: state.unlocked }),
+      onRehydrateStorage: () => (state) => {
+        // Called once AsyncStorage finishes loading — safe to check achievements now.
+        state?.setHasHydrated(true);
+      },
     }
   )
 );
