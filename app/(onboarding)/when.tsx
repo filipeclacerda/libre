@@ -26,10 +26,19 @@ export default function When() {
   }
 
   function handleContinue() {
-    const yyyy = date.getFullYear();
-    const mm = String(date.getMonth() + 1).padStart(2, '0');
-    const dd = String(date.getDate()).padStart(2, '0');
-    setProfile({ quitDate: `${yyyy}-${mm}-${dd}` });
+    const today = new Date();
+    const isToday =
+      date.getFullYear() === today.getFullYear() &&
+      date.getMonth()    === today.getMonth()    &&
+      date.getDate()     === today.getDate();
+
+    // If quitting today: save the exact current time so the counter starts now.
+    // If a past date: save YYYY-MM-DD (midnight) since we don't know the exact hour.
+    const quitDate = isToday
+      ? new Date().toISOString()
+      : `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;
+
+    setProfile({ quitDate });
     router.push('/(onboarding)/consumption');
   }
 

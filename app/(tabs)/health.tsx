@@ -30,6 +30,9 @@ const MILESTONE_DEFS = [
 const SOON_THRESHOLD_MIN = 3 * 24 * 60; // 3 days
 
 function getQuitDateTime(quitDateStr: string): Date {
+  // ISO format (contains 'T') → exact timestamp saved when user quit today
+  // YYYY-MM-DD → past date, use midnight
+  if (quitDateStr.includes('T')) return new Date(quitDateStr);
   const [y, m, d] = quitDateStr.split('-').map(Number);
   return new Date(y, m - 1, d, 0, 0, 0);
 }

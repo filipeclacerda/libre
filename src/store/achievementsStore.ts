@@ -44,6 +44,9 @@ export const useAchievementsStore = create<AchievementsStore>()(
     {
       name: 'libre-achievements',
       storage: createJSONStorage(() => AsyncStorage),
+      // pendingCelebration must NOT be persisted — celebrations should only
+      // appear once per session, not replay every time the app is reopened.
+      partialize: (state) => ({ unlocked: state.unlocked }),
     }
   )
 );

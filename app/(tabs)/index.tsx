@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { View, Text, TouchableOpacity, ScrollView, StyleSheet, Modal, Pressable } from 'react-native';
+import { View, Text, TouchableOpacity, ScrollView, StyleSheet, Modal, Pressable, useWindowDimensions } from 'react-native';
 import { router } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { LinearGradient } from 'expo-linear-gradient';
@@ -14,6 +14,9 @@ import { ACHIEVEMENTS, getTranslatedAchievements } from '@/src/lib/achievements'
 // ── Helpers ──────────────────────────────────────────────────────────────────
 
 function getQuitDateTime(str: string): Date {
+  // ISO format (contains 'T') → exact timestamp saved when user quit today
+  // YYYY-MM-DD → past date, use midnight
+  if (str.includes('T')) return new Date(str);
   const [y, m, d] = str.split('-').map(Number);
   return new Date(y, m - 1, d, 0, 0, 0);
 }
@@ -82,9 +85,9 @@ function CircularTimer({ displayValue, displayUnit, progress }: {
   );
 }
 
-function MetricCard({ icon, iconBg, value, label }: { icon: string; iconBg: string; value: string; label: string }) {
+function MetricCard({ icon, iconBg, value, label, width }: { icon: string; iconBg: string; value: string; label: string; width: number }) {
   return (
-    <View style={styles.metricCard}>
+    <View style={[styles.metricCard, { width }]}>
       <View style={[styles.metricIcon, { backgroundColor: iconBg }]}>
         <Text style={styles.metricIconText}>{icon}</Text>
       </View>
@@ -124,6 +127,9 @@ function AchievementCelebration({
 
 export default function Dashboard() {
   const { t, i18n } = useTranslation();
+  const { width: screenWidth } = useWindowDimensions();
+  // 20px padding each side + 10px gap between cards → exact half width
+  const metricCardWidth = (screenWidth - 40 - 10) / 2;
   const profile = useUserStore(s => s.profile);
   const relapses = useUserStore(s => s.relapses);
   const entries = useDiaryStore(s => s.entries);
@@ -328,10 +334,10 @@ export default function Dashboard() {
         </LinearGradient>
 
         <View style={styles.metricsGrid}>
-          <MetricCard icon="✕" iconBg={Colors.red + 'CC'} value={netCigsNotSmoked.toLocaleString(locale)} label={t('home.cigsNotSmoked')} />
-          <MetricCard icon="✦" iconBg={Colors.primary} value={`R$ ${moneySaved.toLocaleString(locale)}`} label={t('home.saved')} />
-          <MetricCard icon="♥" iconBg={Colors.secondary} value={lifeRegainedDays > 0 ? `${lifeRegainedDays}d` : '< 1d'} label={t('home.lifeRegained')} />
-          <MetricCard icon="◎" iconBg={Colors.secondary + 'BB'} value={`${tarAvoidedG}g`} label={t('home.tarAvoided')} />
+          <MetricCard icon="✕" iconBg={Colors.red + 'CC'} value={netCigsNotSmoked.toLocaleString(locale)} label={t('home.cigsNotSmoked')} width={metricCardWidth} />
+          <MetricCard icon="✦" iconBg={Colors.primary} value={`R$ ${moneySaved.toLocaleString(locale)}`} label={t('home.saved')} width={metricCardWidth} />
+          <MetricCard icon="♥" iconBg={Colors.secondary} value={lifeRegainedDays > 0 ? `${lifeRegainedDays}d` : '< 1d'} label={t('home.lifeRegained')} width={metricCardWidth} />
+          <MetricCard icon="◎" iconBg={Colors.secondary + 'BB'} value={`${tarAvoidedG}g`} label={t('home.tarAvoided')} width={metricCardWidth} />
         </View>
 
         {/* Next achievement */}
@@ -431,7 +437,7 @@ const styles = StyleSheet.create({
   nextMilestoneChip: { marginTop: 4, backgroundColor: Colors.card2, paddingHorizontal: 10, paddingVertical: 4, borderRadius: 10, alignSelf: 'flex-start' },
   nextMilestoneText: { fontSize: 11, color: Colors.muted },
   metricsGrid: { flexDirection: 'row', flexWrap: 'wrap', gap: 10 },
-  metricCard: { width: '47.5%', backgroundColor: Colors.card, borderRadius: 18, padding: 16, gap: 8 },
+  metricCard: { backgroundColor: Colors.card, borderRadius: 18, padding: 16, gap: 8 },
   metricIcon: { width: 36, height: 36, borderRadius: 10, alignItems: 'center', justifyContent: 'center' },
   metricIconText: { fontSize: 16, color: Colors.white },
   metricValue: { fontSize: 22, fontWeight: '800', color: Colors.white, letterSpacing: -0.3 },
