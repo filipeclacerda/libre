@@ -5,6 +5,7 @@ import { useTranslation } from 'react-i18next';
 import { Colors } from '@/src/constants/colors';
 import { useUserStore } from '@/src/store/userStore';
 import { useDiaryStore } from '@/src/store/diaryStore';
+import { parseQuitDate } from '@/src/lib/dateUtils';
 import { router } from 'expo-router';
 
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
@@ -15,11 +16,6 @@ const PERIODS: Record<string, number> = { '7d': 7, '30d': 30, '1a': 365 };
 
 // Internal weekday order keys (Sun=0 .. Sat=6) — stored as locale-independent keys
 const WEEKDAY_KEYS = ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb'];
-
-function getQuitDate(quitDateStr: string) {
-  const [y, m, d] = quitDateStr.split('-').map(Number);
-  return new Date(y, m - 1, d, 0, 0, 0);
-}
 
 function buildSavingsPoints(
   quitDate: Date,
@@ -125,7 +121,7 @@ export default function Stats() {
   const [period, setPeriod] = useState<'7d' | '30d' | '1a'>('30d');
 
   const quitDateStr = profile?.quitDate ?? new Date().toISOString().split('T')[0];
-  const quitDate = getQuitDate(quitDateStr);
+  const quitDate = parseQuitDate(quitDateStr);
   const cigarettesPerDay = profile?.cigarettesPerDay ?? 15;
   const pricePerPack = profile?.pricePerPack ?? 12.5;
   const cigarettesPerPack = profile?.cigarettesPerPack ?? 20;

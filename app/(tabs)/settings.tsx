@@ -8,6 +8,7 @@ import { useUserStore } from '@/src/store/userStore';
 import { useAchievementsStore } from '@/src/store/achievementsStore';
 import { ACHIEVEMENTS, getTranslatedAchievements } from '@/src/lib/achievements';
 import { useLanguageStore, SupportedLanguage } from '@/src/store/languageStore';
+import { parseQuitDate } from '@/src/lib/dateUtils';
 import i18n from '@/src/i18n';
 import {
   requestPermissions, getPermissionStatus,
@@ -15,8 +16,7 @@ import {
 } from '@/src/lib/notifications';
 
 function formatQuitDate(str: string, locale: string) {
-  const [y, m, d] = str.split('-').map(Number);
-  return new Date(y, m - 1, d).toLocaleDateString(locale, {
+  return parseQuitDate(str).toLocaleDateString(locale, {
     day: 'numeric', month: 'long', year: 'numeric',
   });
 }
