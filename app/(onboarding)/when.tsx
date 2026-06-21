@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, Platform } from 'react-native';
-import DateTimePicker, { DateTimePickerEvent } from '@react-native-community/datetimepicker';
+import DateTimePicker, { DateTimePickerChangeEvent } from '@react-native-community/datetimepicker';
 import { router } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useTranslation } from 'react-i18next';
@@ -8,6 +8,7 @@ import { Colors } from '@/src/constants/colors';
 import { OnboardingHeader } from '@/components/ui/OnboardingHeader';
 import { useUserStore } from '@/src/store/userStore';
 import { serializeQuitDate } from '@/src/lib/dateUtils';
+import { localeFor } from '@/src/lib/format';
 
 export default function When() {
   const { t, i18n } = useTranslation();
@@ -15,13 +16,13 @@ export default function When() {
   const [date, setDate] = useState(new Date());
   const [showPicker, setShowPicker] = useState(false);
 
-  const locale = i18n.language === 'en' ? 'en-US' : 'pt-BR';
+  const locale = localeFor(i18n.language);
 
   function formatDate(d: Date) {
     return d.toLocaleDateString(locale, { day: '2-digit', month: 'long', year: 'numeric' });
   }
 
-  function onValueChange(_: DateTimePickerEvent, selected?: Date) {
+  function onValueChange(_: DateTimePickerChangeEvent, selected: Date) {
     if (Platform.OS === 'android') setShowPicker(false);
     if (selected) setDate(selected);
   }
@@ -35,7 +36,7 @@ export default function When() {
     <SafeAreaView style={styles.container}>
       <OnboardingHeader
         step={2}
-        total={4}
+        total={5}
         onBack={() => router.back()}
         onSkip={() => router.push('/(onboarding)/consumption')}
       />

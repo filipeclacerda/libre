@@ -11,28 +11,25 @@ export default function Profile() {
   const { t } = useTranslation();
   const setProfile = useUserStore(s => s.setProfile);
   const [name, setName] = useState('');
-  const [email, setEmail] = useState('');
   const [nameError, setNameError] = useState('');
-  const [emailError, setEmailError] = useState('');
 
   function validate() {
     let ok = true;
     if (!name.trim()) { setNameError(t('onboarding.profile.nameError')); ok = false; } else setNameError('');
-    if (!email.trim() || !email.includes('@')) { setEmailError(t('onboarding.profile.emailError')); ok = false; } else setEmailError('');
     return ok;
   }
 
   function handleContinue() {
     if (!validate()) return;
-    setProfile({ name: name.trim(), email: email.trim().toLowerCase() });
+    setProfile({ name: name.trim() });
     router.push('/(onboarding)/when');
   }
 
-  const canContinue = name.trim().length > 0 && email.includes('@');
+  const canContinue = name.trim().length > 0;
 
   return (
     <SafeAreaView style={styles.container}>
-      <OnboardingHeader step={1} total={4} onBack={() => router.back()} />
+      <OnboardingHeader step={1} total={5} onBack={() => router.back()} />
       <KeyboardAvoidingView
         style={{ flex: 1 }}
         behavior={Platform.OS === 'ios' ? 'padding' : undefined}
@@ -53,22 +50,6 @@ export default function Profile() {
               returnKeyType="next"
             />
             {nameError ? <Text style={styles.errorText}>{nameError}</Text> : null}
-          </View>
-
-          <View style={styles.field}>
-            <Text style={styles.label}>{t('onboarding.profile.emailLabel')}</Text>
-            <TextInput
-              style={[styles.input, emailError ? styles.inputError : null]}
-              placeholder={t('onboarding.profile.emailPh')}
-              placeholderTextColor={Colors.muted}
-              value={email}
-              onChangeText={t_ => { setEmail(t_); if (emailError) setEmailError(''); }}
-              keyboardType="email-address"
-              autoCapitalize="none"
-              returnKeyType="done"
-              onSubmitEditing={handleContinue}
-            />
-            {emailError ? <Text style={styles.errorText}>{emailError}</Text> : null}
           </View>
 
           <View style={styles.privacyCard}>

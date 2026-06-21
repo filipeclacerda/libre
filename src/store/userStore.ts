@@ -5,12 +5,13 @@ import { serializeQuitDate } from '../lib/dateUtils';
 
 export interface UserProfile {
   name: string;
-  email: string;
   quitDate: string;      // ISO or YYYY-MM-DD — today → ISO with time; past → YYYY-MM-DD
   streakStart?: string;  // same format as quitDate; resets on relapse
   cigarettesPerDay: number;
   pricePerPack: number;
   cigarettesPerPack: number;
+  triggers?: string[];
+  currency?: string;
 }
 
 export interface Relapse {

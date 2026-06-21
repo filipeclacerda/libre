@@ -3,9 +3,11 @@ import { View, Text, TouchableOpacity, TextInput, StyleSheet } from 'react-nativ
 import { router } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useTranslation } from 'react-i18next';
+import * as Localization from 'expo-localization';
 import { Colors } from '@/src/constants/colors';
 import { OnboardingHeader } from '@/components/ui/OnboardingHeader';
 import { useUserStore } from '@/src/store/userStore';
+import { formatCurrency, localeFor, SYMBOL_FALLBACK } from '@/src/lib/format';
 
 function Stepper({ label, value, onChange }: { label: string; value: number; onChange: (v: number) => void }) {
   return (
@@ -36,20 +38,23 @@ function Stepper({ label, value, onChange }: { label: string; value: number; onC
 }
 
 export default function Consumption() {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const setProfile = useUserStore(s => s.setProfile);
+  const [detectedCurrency] = useState(() => Localization.getLocales()[0]?.currencyCode ?? 'BRL');
   const [cigarettesPerDay, setCigarettesPerDay] = useState(15);
   const [price, setPrice] = useState('12,50');
   const [perPack, setPerPack] = useState(20);
 
+  const locale = localeFor(i18n.language);
   const priceNum = parseFloat(price.replace(',', '.')) || 0;
   const costPerDay = (cigarettesPerDay / perPack) * priceNum;
   const costPerMonth = Math.round(costPerDay * 30);
   const costPerYear = Math.round(costPerDay * 365);
+  const currencySymbol = SYMBOL_FALLBACK[detectedCurrency] ?? detectedCurrency;
 
   return (
     <SafeAreaView style={styles.container}>
-      <OnboardingHeader step={3} total={4} onBack={() => router.back()} onSkip={() => router.push('/(onboarding)/triggers')} />
+      <OnboardingHeader step={3} total={5} onBack={() => router.back()} onSkip={() => router.push('/(onboarding)/triggers')} />
 
       <View style={styles.content}>
         <Text style={styles.title}>{t('onboarding.consumption.title')}</Text>
@@ -60,7 +65,7 @@ export default function Consumption() {
         <View style={styles.fieldBlock}>
           <Text style={styles.fieldLabel}>{t('onboarding.consumption.packPrice')}</Text>
           <View style={styles.inputRow}>
-            <Text style={styles.inputPrefix}>R$</Text>
+            <Text style={styles.inputPrefix}>{currencySymbol}</Text>
             <TextInput
               style={styles.input}
               value={price}
@@ -68,7 +73,7 @@ export default function Consumption() {
               keyboardType="decimal-pad"
               placeholderTextColor={Colors.muted}
             />
-            <Text style={styles.inputSuffix}>BRL</Text>
+            <Text style={styles.inputSuffix}>{detectedCurrency}</Text>
           </View>
         </View>
 
@@ -78,9 +83,9 @@ export default function Consumption() {
           <View style={styles.calcCard}>
             <Text style={styles.calcText}>
               {t('onboarding.consumption.calcText')}
-              <Text style={styles.calcHighlight}>{t('onboarding.consumption.calcMonth', { amount: costPerMonth })}</Text>
+              <Text style={styles.calcHighlight}>{t('onboarding.consumption.calcMonth', { amount: formatCurrency(costPerMonth, detectedCurrency, locale) })}</Text>
               {t('onboarding.consumption.calcYearSuffix')}
-              <Text style={styles.calcHighlight}>{t('onboarding.consumption.calcYear', { amount: costPerYear.toLocaleString('pt-BR') })}</Text>
+              <Text style={styles.calcHighlight}>{t('onboarding.consumption.calcYear', { amount: formatCurrency(costPerYear, detectedCurrency, locale) })}</Text>
             </Text>
           </View>
         )}
@@ -91,7 +96,7 @@ export default function Consumption() {
           style={styles.primaryButton}
           onPress={() => {
               const priceNum = parseFloat(price.replace(',', '.')) || 0;
-              setProfile({ cigarettesPerDay, pricePerPack: priceNum, cigarettesPerPack: perPack });
+              setProfile({ cigarettesPerDay, pricePerPack: priceNum, cigarettesPerPack: perPack, currency: detectedCurrency });
               router.push('/(onboarding)/triggers');
             }}
           activeOpacity={0.85}

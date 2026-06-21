@@ -7,6 +7,10 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { useTranslation } from 'react-i18next';
 import { Colors } from '@/src/constants/colors';
 import { useDiaryStore, CravingEntry } from '@/src/store/diaryStore';
+import { useUserStore } from '@/src/store/userStore';
+import { TRIGGER_ID_TO_DIARY_KEY, TriggerId } from '@/src/constants/triggers';
+import { syncNotifications } from '@/src/lib/notifications';
+import { localeFor } from '@/src/lib/format';
 
 const TRIGGER_KEYS = ['Estresse', 'Café', 'Álcool', 'Pós-refeição', 'Tédio', 'Social', 'Trabalho', 'Ansiedade'];
 
@@ -48,8 +52,12 @@ function StarPicker({ value, onChange }: { value: number; onChange: (v: number) 
 function AddCravingModal({ visible, onClose }: { visible: boolean; onClose: () => void }) {
   const { t } = useTranslation();
   const addEntry = useDiaryStore(s => s.addEntry);
+  const profile = useUserStore(s => s.profile);
+  const defaultTrigger = profile?.triggers?.[0]
+    ? TRIGGER_ID_TO_DIARY_KEY[profile.triggers[0] as TriggerId] ?? 'Estresse'
+    : 'Estresse';
   const [intensity, setIntensity] = useState<1|2|3|4|5>(3);
-  const [trigger, setTrigger] = useState('Estresse');
+  const [trigger, setTrigger] = useState(defaultTrigger);
   const [resisted, setResisted] = useState(true);
   const [cigarettesSmoked, setCigarettesSmoked] = useState(1);
   const [notes, setNotes] = useState('');
@@ -59,9 +67,13 @@ function AddCravingModal({ visible, onClose }: { visible: boolean; onClose: () =
       intensity, trigger, resisted, notes: notes.trim() || undefined,
       cigarettesSmoked: resisted ? undefined : cigarettesSmoked,
     });
+    if (profile) {
+      // Fire and forget — refreshes the craving-pattern alert once enough entries exist
+      syncNotifications(profile, useDiaryStore.getState().entries);
+    }
     onClose();
     setIntensity(3);
-    setTrigger('Estresse');
+    setTrigger(defaultTrigger);
     setResisted(true);
     setCigarettesSmoked(1);
     setNotes('');
@@ -168,7 +180,7 @@ function AddCravingModal({ visible, onClose }: { visible: boolean; onClose: () =
 
 function EntryCard({ entry, onDelete }: { entry: CravingEntry; onDelete: () => void }) {
   const { t, i18n } = useTranslation();
-  const locale = i18n.language === 'en' ? 'en-US' : 'pt-BR';
+  const locale = localeFor(i18n.language);
 
   return (
     <View style={styles.card}>

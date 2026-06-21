@@ -1,18 +1,20 @@
 import { useEffect, useState } from 'react';
-import { Alert, ScrollView, StyleSheet, Switch, Text, TouchableOpacity, View } from 'react-native';
+import { Alert, Modal, ScrollView, StyleSheet, Switch, Text, TextInput, TouchableOpacity, View, Pressable } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { router } from 'expo-router';
 import { useTranslation } from 'react-i18next';
 import { Colors } from '@/src/constants/colors';
 import { useUserStore } from '@/src/store/userStore';
 import { useAchievementsStore } from '@/src/store/achievementsStore';
+import { useDiaryStore } from '@/src/store/diaryStore';
 import { ACHIEVEMENTS, getTranslatedAchievements } from '@/src/lib/achievements';
 import { useLanguageStore, SupportedLanguage } from '@/src/store/languageStore';
 import { parseQuitDate } from '@/src/lib/dateUtils';
+import { formatCurrency, localeFor } from '@/src/lib/format';
 import i18n from '@/src/i18n';
 import {
   requestPermissions, getPermissionStatus,
-  scheduleDailyMotivational, cancelAll,
+  cancelAll, syncNotifications,
 } from '@/src/lib/notifications';
 
 function formatQuitDate(str: string, locale: string) {
@@ -21,12 +23,13 @@ function formatQuitDate(str: string, locale: string) {
   });
 }
 
-function InfoRow({ label, value }: { label: string; value: string }) {
+function InfoRow({ label, value, onPress }: { label: string; value: string; onPress?: () => void }) {
+  const Wrapper = onPress ? TouchableOpacity : View;
   return (
-    <View style={styles.infoRow}>
+    <Wrapper style={styles.infoRow} onPress={onPress} activeOpacity={0.7}>
       <Text style={styles.infoLabel}>{label}</Text>
       <Text style={styles.infoValue}>{value}</Text>
-    </View>
+    </Wrapper>
   );
 }
 
@@ -52,12 +55,19 @@ function AchievementBadge({ id, unlockDate }: { id: string; unlockDate?: string 
 export default function Settings() {
   const { t } = useTranslation();
   const profile = useUserStore(s => s.profile);
+  const setProfile = useUserStore(s => s.setProfile);
   const clearProfile = useUserStore(s => s.clearProfile);
+  const entries = useDiaryStore(s => s.entries);
   const { unlocked } = useAchievementsStore();
   const [notificationsOn, setNotificationsOn] = useState(false);
   const { language, setLanguage } = useLanguageStore();
+  const [editVisible, setEditVisible] = useState(false);
+  const [editCigsPerDay, setEditCigsPerDay] = useState('15');
+  const [editPrice, setEditPrice] = useState('12,50');
+  const [editPerPack, setEditPerPack] = useState('20');
+  const [editCurrency, setEditCurrency] = useState('BRL');
 
-  const locale = i18n.language === 'en' ? 'en-US' : 'pt-BR';
+  const locale = localeFor(i18n.language);
 
   useEffect(() => {
     getPermissionStatus().then(setNotificationsOn);
@@ -67,7 +77,7 @@ export default function Settings() {
     if (value) {
       const granted = await requestPermissions();
       if (granted) {
-        await scheduleDailyMotivational(9, 0);
+        if (profile) await syncNotifications(profile, entries);
         setNotificationsOn(true);
       }
     } else {
@@ -79,6 +89,24 @@ export default function Settings() {
   function handleLanguageSelect(lang: SupportedLanguage) {
     setLanguage(lang);
     i18n.changeLanguage(lang);
+  }
+
+  function openEditConsumption() {
+    if (!profile) return;
+    setEditCigsPerDay(String(profile.cigarettesPerDay));
+    setEditPrice(profile.pricePerPack.toFixed(2).replace('.', ','));
+    setEditPerPack(String(profile.cigarettesPerPack));
+    setEditCurrency(profile.currency ?? 'BRL');
+    setEditVisible(true);
+  }
+
+  function handleSaveConsumption() {
+    const cigsPerDay = Math.max(1, parseInt(editCigsPerDay, 10) || 1);
+    const priceNum = parseFloat(editPrice.replace(',', '.')) || 0;
+    const perPack = Math.max(1, parseInt(editPerPack, 10) || 1);
+    const currency = editCurrency.trim().toUpperCase() || 'BRL';
+    setProfile({ cigarettesPerDay: cigsPerDay, pricePerPack: priceNum, cigarettesPerPack: perPack, currency });
+    setEditVisible(false);
   }
 
   function handleLogout() {
@@ -103,9 +131,9 @@ export default function Settings() {
   const unlockedCount = Object.keys(unlocked).length;
 
   const categories: { labelKey: string; key: 'time' | 'savings' | 'diary' }[] = [
-    { labelKey: 'TEMPO', key: 'time' },
-    { labelKey: 'ECONOMIA', key: 'savings' },
-    { labelKey: 'DIÁRIO', key: 'diary' },
+    { labelKey: 'time', key: 'time' },
+    { labelKey: 'savings', key: 'savings' },
+    { labelKey: 'diary', key: 'diary' },
   ];
 
   const currentLang = (language ?? i18n.language ?? 'pt') as SupportedLanguage;
@@ -124,7 +152,6 @@ export default function Settings() {
               </View>
               <View style={styles.profileInfo}>
                 <Text style={styles.profileName}>{profile.name}</Text>
-                <Text style={styles.profileEmail}>{profile.email}</Text>
               </View>
             </View>
 
@@ -143,16 +170,19 @@ export default function Settings() {
                 <InfoRow
                   label={t('settings.cigsPerDay')}
                   value={t('settings.cigsPerDayValue', { count: profile.cigarettesPerDay })}
+                  onPress={openEditConsumption}
                 />
                 <View style={styles.divider} />
                 <InfoRow
                   label={t('settings.pricePerPack')}
-                  value={t('settings.pricePerPackValue', { price: profile.pricePerPack.toFixed(2).replace('.', ',') })}
+                  value={formatCurrency(profile.pricePerPack, profile.currency ?? 'BRL', locale)}
+                  onPress={openEditConsumption}
                 />
                 <View style={styles.divider} />
                 <InfoRow
                   label={t('settings.cigsPerPack')}
                   value={t('settings.cigsPerPackValue', { count: profile.cigarettesPerPack })}
+                  onPress={openEditConsumption}
                 />
               </View>
             </View>
@@ -177,6 +207,14 @@ export default function Settings() {
               activeOpacity={0.7}
             >
               <Text style={[styles.langBtnText, currentLang === 'en' && styles.langBtnTextActive]}>EN</Text>
+            </TouchableOpacity>
+            <View style={styles.langDivider} />
+            <TouchableOpacity
+              style={[styles.langBtn, currentLang === 'es' && styles.langBtnActive]}
+              onPress={() => handleLanguageSelect('es')}
+              activeOpacity={0.7}
+            >
+              <Text style={[styles.langBtnText, currentLang === 'es' && styles.langBtnTextActive]}>ES</Text>
             </TouchableOpacity>
           </View>
         </View>
@@ -229,6 +267,65 @@ export default function Settings() {
           <Text style={styles.logoutBtnText}>{t('settings.logout')}</Text>
         </TouchableOpacity>
       </ScrollView>
+
+      <Modal visible={editVisible} animationType="slide" transparent presentationStyle="overFullScreen">
+        <Pressable style={editStyles.overlay} onPress={() => setEditVisible(false)} />
+        <SafeAreaView style={editStyles.sheet} edges={['bottom']}>
+          <View style={editStyles.inner}>
+            <View style={editStyles.handle} />
+            <Text style={editStyles.title}>{t('settings.consumption')}</Text>
+
+            <View style={editStyles.field}>
+              <Text style={editStyles.label}>{t('settings.cigsPerDay')}</Text>
+              <TextInput
+                style={editStyles.input}
+                value={editCigsPerDay}
+                onChangeText={setEditCigsPerDay}
+                keyboardType="number-pad"
+                placeholderTextColor={Colors.muted}
+              />
+            </View>
+
+            <View style={editStyles.field}>
+              <Text style={editStyles.label}>{t('settings.pricePerPack')}</Text>
+              <TextInput
+                style={editStyles.input}
+                value={editPrice}
+                onChangeText={setEditPrice}
+                keyboardType="decimal-pad"
+                placeholderTextColor={Colors.muted}
+              />
+            </View>
+
+            <View style={editStyles.field}>
+              <Text style={editStyles.label}>{t('settings.cigsPerPack')}</Text>
+              <TextInput
+                style={editStyles.input}
+                value={editPerPack}
+                onChangeText={setEditPerPack}
+                keyboardType="number-pad"
+                placeholderTextColor={Colors.muted}
+              />
+            </View>
+
+            <View style={editStyles.field}>
+              <Text style={editStyles.label}>{t('settings.currency')}</Text>
+              <TextInput
+                style={editStyles.input}
+                value={editCurrency}
+                onChangeText={t_ => setEditCurrency(t_.toUpperCase())}
+                autoCapitalize="characters"
+                maxLength={3}
+                placeholderTextColor={Colors.muted}
+              />
+            </View>
+
+            <TouchableOpacity style={editStyles.saveBtn} onPress={handleSaveConsumption} activeOpacity={0.85}>
+              <Text style={editStyles.saveBtnText}>{t('settings.save')}</Text>
+            </TouchableOpacity>
+          </View>
+        </SafeAreaView>
+      </Modal>
     </SafeAreaView>
   );
 }
@@ -301,4 +398,30 @@ const styles = StyleSheet.create({
     alignItems: 'center', borderWidth: 1.5, borderColor: Colors.red + '44',
   },
   logoutBtnText: { fontSize: 15, fontWeight: '700', color: Colors.red },
+});
+
+const editStyles = StyleSheet.create({
+  overlay: { flex: 1, backgroundColor: 'rgba(0,0,0,0.6)' },
+  sheet: {
+    backgroundColor: Colors.card,
+    borderTopLeftRadius: 24, borderTopRightRadius: 24,
+  },
+  inner: {
+    paddingHorizontal: 28, paddingTop: 12, paddingBottom: 36, gap: 18,
+  },
+  handle: { width: 36, height: 4, borderRadius: 2, backgroundColor: Colors.border, alignSelf: 'center', marginBottom: 4 },
+  title: { fontSize: 20, fontWeight: '800', color: Colors.white },
+  field: { gap: 8 },
+  label: { fontSize: 11, fontWeight: '600', color: Colors.muted, letterSpacing: 1 },
+  input: {
+    backgroundColor: Colors.bg,
+    borderWidth: 1.5, borderColor: Colors.border,
+    borderRadius: 14, paddingHorizontal: 16, paddingVertical: 14,
+    color: Colors.white, fontSize: 16,
+  },
+  saveBtn: {
+    backgroundColor: Colors.primary, borderRadius: 16,
+    paddingVertical: 17, alignItems: 'center', marginTop: 8,
+  },
+  saveBtnText: { color: Colors.white, fontSize: 16, fontWeight: '700' },
 });

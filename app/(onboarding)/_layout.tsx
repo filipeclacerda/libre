@@ -9,6 +9,7 @@ export default function OnboardingLayout() {
       <Stack.Screen name="when" />
       <Stack.Screen name="consumption" />
       <Stack.Screen name="triggers" />
+      <Stack.Screen name="notifications" />
     </Stack>
   );
 }

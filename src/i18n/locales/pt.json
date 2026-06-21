@@ -22,6 +22,7 @@
     "remaining": "faltam {{label}}",
     "achievementUnlocked": "Conquista desbloqueada!",
     "incredibleBtn": "Incrível! 🎉",
+    "shareBtn": "Compartilhar",
     "quoteSection": "Frase do dia",
     "thisWeek": "ESTA SEMANA",
     "cravingsRegistered": "fissuras\nregistradas",
@@ -42,7 +43,7 @@
     "timeLeft_cravings_other": "{{count}} fissuras vencidas",
     "timeLeft_entries_one": "{{count}} registro",
     "timeLeft_entries_other": "{{count}} registros",
-    "timeLeft_money": "R$ {{amount}}",
+    "timeLeft_money": "{{amount}}",
     "timeSteps": {
       "h12": "Primeira Noite",
       "h24": "Primeiro Amanhecer",
@@ -189,7 +190,7 @@
     "last30days": "Últimos 30 dias",
     "lastYear": "Último ano",
     "accumulatedSavings": "ECONOMIA ACUMULADA",
-    "todaySavings": "+ R$ {{amount}} hoje",
+    "todaySavings": "+ {{amount}} hoje",
     "fewData": "Poucos dados ainda — continue assim!",
     "cravingsByWeekday": "FISSURAS POR DIA DA SEMANA",
     "hardestDay": "{{day}} é o dia mais difícil — fique atento.",
@@ -225,17 +226,19 @@
     "cigsPerDay": "Cigarros por dia",
     "cigsPerDayValue": "{{count}} cigarros",
     "pricePerPack": "Preço por maço",
-    "pricePerPackValue": "R$ {{price}}",
+    "pricePerPackValue": "{{price}}",
     "cigsPerPack": "Cigarros por maço",
     "cigsPerPackValue": "{{count}} cigarros",
+    "currency": "MOEDA",
+    "save": "Salvar",
     "notifications": "NOTIFICAÇÕES",
     "dailyMotivation": "Motivação diária",
     "dailyAt": "Todos os dias às 9h",
     "achievements": "CONQUISTAS",
     "achievementCategories": {
-      "TEMPO": "TEMPO",
-      "ECONOMIA": "ECONOMIA",
-      "DIÁRIO": "DIÁRIO"
+      "time": "TEMPO",
+      "savings": "ECONOMIA",
+      "diary": "DIÁRIO"
     },
     "logout": "Sair da conta",
     "logoutTitle": "Sair do app",
@@ -327,12 +330,9 @@
       "subtitle": "Seus dados ficam só no seu dispositivo e ajudam a personalizar sua experiência.",
       "nameLabel": "SEU NOME",
       "namePh": "Como quer ser chamado?",
-      "emailLabel": "E-MAIL",
-      "emailPh": "seu@email.com",
       "privacy": "🔒 Seus dados nunca são compartilhados com terceiros.",
       "continueBtn": "Continuar →",
-      "nameError": "Informe seu nome",
-      "emailError": "E-mail inválido"
+      "nameError": "Informe seu nome"
     },
     "when": {
       "title": "Quando você parou?",
@@ -351,9 +351,9 @@
       "cigsPerPack": "CIGARROS POR MAÇO",
       "cigUnit": "cig",
       "calcText": "✦ Você gasta cerca de ",
-      "calcMonth": "R$ {{amount}}/mês",
+      "calcMonth": "{{amount}}/mês",
       "calcYearSuffix": " com cigarro. Em 1 ano isso é ",
-      "calcYear": "R$ {{amount}}.",
+      "calcYear": "{{amount}}.",
       "continueBtn": "Continuar →"
     },
     "triggers": {
@@ -370,6 +370,16 @@
         "work": "💼 Trabalho",
         "anxiety": "😰 Ansiedade"
       }
+    },
+    "notifications": {
+      "title": "Quer lembretes que te mantêm firme?",
+      "subtitle": "Vamos te enviar mensagens motivacionais e avisar nos seus marcos importantes. Você pode desativar quando quiser.",
+      "enableBtn": "Ativar notificações",
+      "skipBtn": "Agora não"
+    },
+    "header": {
+      "step": "ETAPA {{step}} DE {{total}}",
+      "skip": "Pular"
     }
   },
   "achievements": {

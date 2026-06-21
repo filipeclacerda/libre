@@ -1,16 +1,21 @@
-import { useEffect, useState, useMemo } from 'react';
-import { View, Text, TouchableOpacity, ScrollView, StyleSheet, Modal, Pressable, useWindowDimensions } from 'react-native';
+import { useEffect, useState, useMemo, useRef } from 'react';
+import { View, Text, TouchableOpacity, ScrollView, StyleSheet, Modal, Pressable, useWindowDimensions, Platform } from 'react-native';
 import { router } from 'expo-router';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { LinearGradient } from 'expo-linear-gradient';
 import Svg, { Circle } from 'react-native-svg';
 import { useTranslation } from 'react-i18next';
+import * as StoreReview from 'expo-store-review';
+import { captureRef } from 'react-native-view-shot';
+import * as Sharing from 'expo-sharing';
 import { Colors } from '@/src/constants/colors';
 import { useUserStore } from '@/src/store/userStore';
 import { useAchievementsStore } from '@/src/store/achievementsStore';
+import { useAppMetaStore } from '@/src/store/appMetaStore';
 import { useDiaryStore } from '@/src/store/diaryStore';
 import { ACHIEVEMENTS, getTranslatedAchievements } from '@/src/lib/achievements';
 import { parseQuitDate } from '@/src/lib/dateUtils';
+import { formatCurrency, localeFor } from '@/src/lib/format';
 
 // ── Helpers ──────────────────────────────────────────────────────────────────
 
@@ -91,18 +96,87 @@ function MetricCard({ icon, iconBg, value, label, width }: { icon: string; iconB
   );
 }
 
-function AchievementCelebration({
-  achievementId, onDismiss,
-}: { achievementId: string; onDismiss: () => void }) {
+// LiveTimer owns the 1s ticking clock — isolated so the rest of the Dashboard
+// (metrics, achievements, weekly summary) doesn't re-render every second.
+function LiveTimer({ streakDate, relapsesCount }: { streakDate: Date; relapsesCount: number }) {
   const { t } = useTranslation();
-  const translatedAchievements = getTranslatedAchievements(t);
+  const [elapsed, setElapsed] = useState(() => getElapsed(streakDate));
+
+  useEffect(() => {
+    setElapsed(getElapsed(streakDate)); // resync immediately when streakDate changes
+    const id = setInterval(() => setElapsed(getElapsed(streakDate)), 1000);
+    return () => clearInterval(id);
+  }, [streakDate]);
+
+  const { days, hours, minutes, seconds } = elapsed;
+  const hoursSinceQuit = elapsed.totalSeconds / 3600;
+  const nextTimeStep = TIME_STEP_HOURS.find(s => hoursSinceQuit < s.hours);
+  const prevTimeHours = nextTimeStep
+    ? (TIME_STEP_HOURS[TIME_STEP_HOURS.indexOf(nextTimeStep) - 1]?.hours ?? 0)
+    : TIME_STEP_HOURS[TIME_STEP_HOURS.length - 1].hours;
+  const ringProgress = nextTimeStep
+    ? (hoursSinceQuit - prevTimeHours) / (nextTimeStep.hours - prevTimeHours)
+    : 1;
+  const circleValue = hoursSinceQuit < 24 ? hours : days;
+  const circleUnit = hoursSinceQuit < 24 ? t('home.hours') : t('home.days');
+
+  return (
+    <View style={styles.timerCardBody}>
+      <CircularTimer displayValue={circleValue} displayUnit={circleUnit} progress={ringProgress} />
+      <View style={styles.timerDetails}>
+        <View style={styles.timerDetailRow}>
+          <Text style={styles.timerDetailNum}>{hours}</Text>
+          <Text style={styles.timerDetailUnit}>{t('home.hours')}</Text>
+        </View>
+        <View style={styles.timerDetailRow}>
+          <Text style={styles.timerDetailNum}>{minutes}</Text>
+          <Text style={styles.timerDetailUnit}>{t('home.minutes')}</Text>
+        </View>
+        <View style={styles.timerDetailRow}>
+          <Text style={styles.timerDetailNum}>{seconds}</Text>
+          <Text style={styles.timerDetailUnit}>{t('home.seconds')}</Text>
+        </View>
+        {nextTimeStep && (
+          <View style={styles.nextMilestoneChip}>
+            <Text style={styles.nextMilestoneText}>→ {t(`home.timeSteps.${nextTimeStep.key}`)}</Text>
+          </View>
+        )}
+        {relapsesCount > 0 && (
+          <View style={[styles.nextMilestoneChip, { backgroundColor: Colors.red + '22' }]}>
+            <Text style={[styles.nextMilestoneText, { color: Colors.red + 'CC' }]}>
+              {t('home.relapses', { count: relapsesCount })}
+            </Text>
+          </View>
+        )}
+      </View>
+    </View>
+  );
+}
+
+function AchievementCelebration({
+  achievementId, onDismiss, translatedAchievements,
+}: { achievementId: string; onDismiss: () => void; translatedAchievements: ReturnType<typeof getTranslatedAchievements> }) {
+  const { t } = useTranslation();
+  const cardRef = useRef<View>(null);
   const achievement = translatedAchievements.find(a => a.id === achievementId);
   if (!achievement) return null;
+
+  async function handleShare() {
+    if (Platform.OS === 'web') return;
+    const available = await Sharing.isAvailableAsync();
+    if (!available) return;
+    try {
+      const uri = await captureRef(cardRef, { format: 'png', quality: 0.9 });
+      await Sharing.shareAsync(uri);
+    } catch {
+      // best-effort — silently ignore capture/share failures
+    }
+  }
 
   return (
     <Modal visible transparent animationType="fade">
       <Pressable style={cel.overlay} onPress={onDismiss}>
-        <View style={cel.card}>
+        <View style={cel.card} ref={cardRef} collapsable={false}>
           <Text style={cel.sparkle}>✨</Text>
           <Text style={cel.badgeIcon}>{achievement.icon}</Text>
           <Text style={cel.headline}>{t('home.achievementUnlocked')}</Text>
@@ -111,6 +185,11 @@ function AchievementCelebration({
           <TouchableOpacity style={cel.btn} onPress={onDismiss} activeOpacity={0.85}>
             <Text style={cel.btnText}>{t('home.incredibleBtn')}</Text>
           </TouchableOpacity>
+          {Platform.OS !== 'web' && (
+            <TouchableOpacity style={cel.shareBtn} onPress={handleShare} activeOpacity={0.7}>
+              <Text style={cel.shareBtnText}>{t('home.shareBtn')}</Text>
+            </TouchableOpacity>
+          )}
         </View>
       </Pressable>
     </Modal>
@@ -128,56 +207,53 @@ export default function Dashboard() {
   const relapses = useUserStore(s => s.relapses);
   const entries = useDiaryStore(s => s.entries);
   const { checkAndUnlock, pendingCelebration, dismissCelebration, unlocked, hasHydrated } = useAchievementsStore();
+  const { askedForReview, setAskedForReview } = useAppMetaStore();
 
   // Streak is calculated from streakStart (resets on relapse) or quitDate
   const streakDateStr = profile?.streakStart ?? profile?.quitDate ?? new Date().toISOString().split('T')[0];
   const quitDateStr   = profile?.quitDate ?? new Date().toISOString().split('T')[0];
 
   const streakDate = parseQuitDate(streakDateStr);
-  const quitDate   = parseQuitDate(quitDateStr);
 
-  const [elapsed, setElapsed] = useState(() => getElapsed(streakDate));
-
+  // Low-frequency clock — drives the journey metrics (60s cadence), distinct
+  // from LiveTimer's own 1s clock so the rest of the screen doesn't re-render every second.
+  const [now, setNow] = useState(() => Date.now());
   useEffect(() => {
-    const id = setInterval(() => setElapsed(getElapsed(streakDate)), 1000);
+    const id = setInterval(() => setNow(Date.now()), 60000);
     return () => clearInterval(id);
-  }, [streakDate]);
-
-  const { days, hours, minutes, seconds, totalSeconds } = elapsed;
+  }, []);
 
   // Metrics calculated from ORIGINAL quit date (full journey)
   const cigarettesPerDay  = profile?.cigarettesPerDay ?? 15;
   const pricePerPack      = profile?.pricePerPack ?? 12.5;
   const cigarettesPerPack = profile?.cigarettesPerPack ?? 20;
+  const currency          = profile?.currency ?? 'BRL';
+  const locale = localeFor(i18n.language);
 
-  const totalSecondsFromQuit = Math.floor(Math.max(0, Date.now() - quitDate.getTime()) / 1000);
-  const cigarettesNotSmoked  = Math.floor((totalSecondsFromQuit / 86400) * cigarettesPerDay);
-  const relapsesCigs         = relapses.reduce((sum, r) => sum + r.cigarettes, 0);
-  const diaryCigs            = entries.filter(e => !e.resisted).reduce((sum, e) => sum + (e.cigarettesSmoked ?? 0), 0);
-  const netCigsNotSmoked     = Math.max(0, cigarettesNotSmoked - relapsesCigs - diaryCigs);
-  const moneySaved           = Math.round((netCigsNotSmoked / cigarettesPerPack) * pricePerPack);
-  const lifeRegainedDays     = Math.floor((netCigsNotSmoked * 11) / 1440);
-  const tarAvoidedG          = ((netCigsNotSmoked * 47) / 1000).toFixed(1);
-  const hoursSinceQuit       = Math.floor(totalSecondsFromQuit / 3600);
-  const daysSinceQuit        = Math.floor(totalSecondsFromQuit / 86400);
+  const metrics = useMemo(() => {
+    const quitDate = parseQuitDate(quitDateStr);
+    const totalSecondsFromQuit = Math.floor(Math.max(0, now - quitDate.getTime()) / 1000);
+    const cigarettesNotSmoked  = Math.floor((totalSecondsFromQuit / 86400) * cigarettesPerDay);
+    const relapsesCigs         = relapses.reduce((sum, r) => sum + r.cigarettes, 0);
+    const diaryCigs            = entries.filter(e => !e.resisted).reduce((sum, e) => sum + (e.cigarettesSmoked ?? 0), 0);
+    const netCigsNotSmoked     = Math.max(0, cigarettesNotSmoked - relapsesCigs - diaryCigs);
+    const moneySaved           = Math.round((netCigsNotSmoked / cigarettesPerPack) * pricePerPack);
+    const lifeRegainedDays     = Math.floor((netCigsNotSmoked * 11) / 1440);
+    const tarAvoidedG          = ((netCigsNotSmoked * 47) / 1000).toFixed(1);
+    const hoursSinceQuit       = Math.floor(totalSecondsFromQuit / 3600);
+    const daysSinceQuit        = Math.floor(totalSecondsFromQuit / 86400);
+    return { netCigsNotSmoked, moneySaved, lifeRegainedDays, tarAvoidedG, hoursSinceQuit, daysSinceQuit };
+  }, [now, quitDateStr, cigarettesPerDay, cigarettesPerPack, pricePerPack, relapses, entries]);
 
-  // Ring progress: fill towards the next time milestone
-  const nextTimeStep    = TIME_STEP_HOURS.find(s => hoursSinceQuit < s.hours);
-  const prevTimeHours   = nextTimeStep
-    ? (TIME_STEP_HOURS[TIME_STEP_HOURS.indexOf(nextTimeStep) - 1]?.hours ?? 0)
-    : TIME_STEP_HOURS[TIME_STEP_HOURS.length - 1].hours;
-  const ringProgress    = nextTimeStep
-    ? (hoursSinceQuit - prevTimeHours) / (nextTimeStep.hours - prevTimeHours)
-    : 1;
-  // Show hours inside the circle during the first day; days after that
-  const circleValue     = hoursSinceQuit < 24 ? hoursSinceQuit : days;
-  const circleUnit      = hoursSinceQuit < 24 ? t('home.hours') : t('home.days');
+  const { netCigsNotSmoked, moneySaved, lifeRegainedDays, tarAvoidedG, hoursSinceQuit, daysSinceQuit } = metrics;
 
   // ── Card: próxima conquista ──────────────────────────────────────────────────
-  const cravingsWon = entries.filter(e => e.resisted).length;
-  const achievCtx: ACtx = { hoursSinceQuit, daysSinceQuit, cigarettesNotSmoked: netCigsNotSmoked, moneySaved, cravingsWon, diaryEntries: entries.length };
+  const cravingsWon = useMemo(() => entries.filter(e => e.resisted).length, [entries]);
+  const achievCtx: ACtx = useMemo(() => ({
+    hoursSinceQuit, daysSinceQuit, cigarettesNotSmoked: netCigsNotSmoked, moneySaved, cravingsWon, diaryEntries: entries.length,
+  }), [hoursSinceQuit, daysSinceQuit, netCigsNotSmoked, moneySaved, cravingsWon, entries.length]);
 
-  const ACHIEV_THRESHOLDS = useMemo(() => [
+  const ACHIEV_THRESHOLDS = useMemo<{ id: string; get: (c: ACtx) => number; target: number; fmtLeft: (n: number) => string }[]>(() => [
     { id: 'h12',     get: c => c.hoursSinceQuit,      target: 12,    fmtLeft: n => t('home.timeLeft_hours', { count: n }) },
     { id: 'h24',     get: c => c.hoursSinceQuit,      target: 24,    fmtLeft: n => t('home.timeLeft_hours', { count: n }) },
     { id: 'd2',      get: c => c.daysSinceQuit,       target: 2,     fmtLeft: n => t('home.timeLeft_days', { count: n }) },
@@ -195,13 +271,13 @@ export default function Dashboard() {
     { id: 'cig200',  get: c => c.cigarettesNotSmoked, target: 200,   fmtLeft: n => t('home.timeLeft_cigarettes', { count: n }) },
     { id: 'cig500',  get: c => c.cigarettesNotSmoked, target: 500,   fmtLeft: n => t('home.timeLeft_cigarettes', { count: n }) },
     { id: 'cig1000', get: c => c.cigarettesNotSmoked, target: 1000,  fmtLeft: n => t('home.timeLeft_cigarettes', { count: n }) },
-    { id: 'r20',     get: c => c.moneySaved,          target: 20,    fmtLeft: n => t('home.timeLeft_money', { amount: n }) },
-    { id: 'r50',     get: c => c.moneySaved,          target: 50,    fmtLeft: n => t('home.timeLeft_money', { amount: n }) },
-    { id: 'r100',    get: c => c.moneySaved,          target: 100,   fmtLeft: n => t('home.timeLeft_money', { amount: n }) },
-    { id: 'r200',    get: c => c.moneySaved,          target: 200,   fmtLeft: n => t('home.timeLeft_money', { amount: n }) },
-    { id: 'r500',    get: c => c.moneySaved,          target: 500,   fmtLeft: n => t('home.timeLeft_money', { amount: n }) },
-    { id: 'r1000',   get: c => c.moneySaved,          target: 1000,  fmtLeft: n => t('home.timeLeft_money', { amount: n }) },
-    { id: 'r2000',   get: c => c.moneySaved,          target: 2000,  fmtLeft: n => t('home.timeLeft_money', { amount: n }) },
+    { id: 'r20',     get: c => c.moneySaved,          target: 20,    fmtLeft: n => t('home.timeLeft_money', { amount: formatCurrency(n, currency, locale) }) },
+    { id: 'r50',     get: c => c.moneySaved,          target: 50,    fmtLeft: n => t('home.timeLeft_money', { amount: formatCurrency(n, currency, locale) }) },
+    { id: 'r100',    get: c => c.moneySaved,          target: 100,   fmtLeft: n => t('home.timeLeft_money', { amount: formatCurrency(n, currency, locale) }) },
+    { id: 'r200',    get: c => c.moneySaved,          target: 200,   fmtLeft: n => t('home.timeLeft_money', { amount: formatCurrency(n, currency, locale) }) },
+    { id: 'r500',    get: c => c.moneySaved,          target: 500,   fmtLeft: n => t('home.timeLeft_money', { amount: formatCurrency(n, currency, locale) }) },
+    { id: 'r1000',   get: c => c.moneySaved,          target: 1000,  fmtLeft: n => t('home.timeLeft_money', { amount: formatCurrency(n, currency, locale) }) },
+    { id: 'r2000',   get: c => c.moneySaved,          target: 2000,  fmtLeft: n => t('home.timeLeft_money', { amount: formatCurrency(n, currency, locale) }) },
     { id: 'res1',    get: c => c.cravingsWon,         target: 1,     fmtLeft: n => t('home.timeLeft_cravings', { count: n }) },
     { id: 'res5',    get: c => c.cravingsWon,         target: 5,     fmtLeft: n => t('home.timeLeft_cravings', { count: n }) },
     { id: 'res10',   get: c => c.cravingsWon,         target: 10,    fmtLeft: n => t('home.timeLeft_cravings', { count: n }) },
@@ -214,11 +290,11 @@ export default function Dashboard() {
     { id: 'diary20', get: c => c.diaryEntries,        target: 20,    fmtLeft: n => t('home.timeLeft_entries', { count: n }) },
     { id: 'diary50', get: c => c.diaryEntries,        target: 50,    fmtLeft: n => t('home.timeLeft_entries', { count: n }) },
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  ], [i18n.language]); // only rebuild when language changes
+  ], [i18n.language, currency, locale]); // rebuild when language or currency/locale changes
 
-  const translatedAchievements = getTranslatedAchievements(t);
+  const translatedAchievements = useMemo(() => getTranslatedAchievements(t), [i18n.language]);
 
-  const nextAchiev = (() => {
+  const nextAchiev = useMemo(() => {
     const best = ACHIEV_THRESHOLDS
       .filter(th => !unlocked[th.id] && th.get(achievCtx) < th.target)
       .map(th => ({ th, progress: th.get(achievCtx) / th.target }))
@@ -228,24 +304,27 @@ export default function Dashboard() {
     const current = best.th.get(achievCtx);
     const remaining = best.th.target - current;
     return { achievement, progress: best.progress, label: best.th.fmtLeft(remaining), current, target: best.th.target };
-  })();
+  }, [ACHIEV_THRESHOLDS, unlocked, achievCtx, translatedAchievements]);
 
   // ── Card: frase do dia ────────────────────────────────────────────────────────
-  const dayOfYear = Math.floor((Date.now() - new Date(new Date().getFullYear(), 0, 0).getTime()) / 86400000);
+  const dayOfYear = Math.floor((now - new Date(new Date().getFullYear(), 0, 0).getTime()) / 86400000);
   const quotes = t('quotes', { returnObjects: true }) as string[];
   const dailyQuote = quotes[dayOfYear % quotes.length];
 
   // ── Card: resumo semanal ──────────────────────────────────────────────────────
-  const weekCutoff = new Date(); weekCutoff.setDate(weekCutoff.getDate() - 7);
-  const weekEntries = entries.filter(e => new Date(e.timestamp) >= weekCutoff);
-  const weekResisted = weekEntries.filter(e => e.resisted).length;
-  const weekResistRate = weekEntries.length > 0 ? Math.round((weekResisted / weekEntries.length) * 100) : 0;
-  const weekTopTrigger = (() => {
-    if (weekEntries.length === 0) return null;
-    const counts: Record<string, number> = {};
-    weekEntries.forEach(e => { counts[e.trigger] = (counts[e.trigger] ?? 0) + 1; });
-    return Object.entries(counts).sort((a, b) => b[1] - a[1])[0][0];
-  })();
+  const { weekEntries, weekResistRate, weekTopTrigger } = useMemo(() => {
+    const weekCutoff = new Date(); weekCutoff.setDate(weekCutoff.getDate() - 7);
+    const weekEntries = entries.filter(e => new Date(e.timestamp) >= weekCutoff);
+    const weekResisted = weekEntries.filter(e => e.resisted).length;
+    const weekResistRate = weekEntries.length > 0 ? Math.round((weekResisted / weekEntries.length) * 100) : 0;
+    const weekTopTrigger = (() => {
+      if (weekEntries.length === 0) return null;
+      const counts: Record<string, number> = {};
+      weekEntries.forEach(e => { counts[e.trigger] = (counts[e.trigger] ?? 0) + 1; });
+      return Object.entries(counts).sort((a, b) => b[1] - a[1])[0][0];
+    })();
+    return { weekEntries, weekResistRate, weekTopTrigger };
+  }, [entries]);
 
   // Check achievements — hasHydrated must be a dependency so this re-runs
   // once AsyncStorage finishes loading, catching all past achievements.
@@ -260,8 +339,22 @@ export default function Dashboard() {
     });
   }, [hasHydrated, hoursSinceQuit, daysSinceQuit, netCigsNotSmoked, moneySaved, cravingsWon, entries.length]);
 
+  async function handleCelebrationDismiss() {
+    dismissCelebration();
+    if (!askedForReview && Platform.OS !== 'web') {
+      try {
+        const available = await StoreReview.isAvailableAsync();
+        if (available) {
+          setAskedForReview(); // set BEFORE calling, so a crash/early-exit doesn't loop-ask
+          await StoreReview.requestReview();
+        }
+      } catch {
+        // best-effort — never block dismissal on review prompt failures
+      }
+    }
+  }
+
   const firstName = (profile?.name ?? 'você').split(' ')[0];
-  const locale = i18n.language === 'en' ? 'en-US' : 'pt-BR';
   const today = new Date();
   const header = `${today.toLocaleDateString(locale, { weekday: 'long' }).replace(/^\w/, c => c.toUpperCase())} · ${today.toLocaleDateString(locale, { day: 'numeric', month: 'short' })}`;
 
@@ -271,7 +364,8 @@ export default function Dashboard() {
       {pendingCelebration.length > 0 && (
         <AchievementCelebration
           achievementId={pendingCelebration[0]}
-          onDismiss={dismissCelebration}
+          onDismiss={handleCelebrationDismiss}
+          translatedAchievements={translatedAchievements}
         />
       )}
 
@@ -293,40 +387,12 @@ export default function Dashboard() {
               <Text style={styles.sequenceBadgeText}>{t('home.streakActive')}</Text>
             </View>
           </View>
-          <View style={styles.timerCardBody}>
-            <CircularTimer displayValue={circleValue} displayUnit={circleUnit} progress={ringProgress} />
-            <View style={styles.timerDetails}>
-              <View style={styles.timerDetailRow}>
-                <Text style={styles.timerDetailNum}>{hours}</Text>
-                <Text style={styles.timerDetailUnit}>{t('home.hours')}</Text>
-              </View>
-              <View style={styles.timerDetailRow}>
-                <Text style={styles.timerDetailNum}>{minutes}</Text>
-                <Text style={styles.timerDetailUnit}>{t('home.minutes')}</Text>
-              </View>
-              <View style={styles.timerDetailRow}>
-                <Text style={styles.timerDetailNum}>{seconds}</Text>
-                <Text style={styles.timerDetailUnit}>{t('home.seconds')}</Text>
-              </View>
-              {nextTimeStep && (
-                <View style={styles.nextMilestoneChip}>
-                  <Text style={styles.nextMilestoneText}>→ {t(`home.timeSteps.${nextTimeStep.key}`)}</Text>
-                </View>
-              )}
-              {relapses.length > 0 && (
-                <View style={[styles.nextMilestoneChip, { backgroundColor: Colors.red + '22' }]}>
-                  <Text style={[styles.nextMilestoneText, { color: Colors.red + 'CC' }]}>
-                    {t('home.relapses', { count: relapses.length })}
-                  </Text>
-                </View>
-              )}
-            </View>
-          </View>
+          <LiveTimer streakDate={streakDate} relapsesCount={relapses.length} />
         </LinearGradient>
 
         <View style={styles.metricsGrid}>
           <MetricCard icon="✕" iconBg={Colors.red + 'CC'} value={netCigsNotSmoked.toLocaleString(locale)} label={t('home.cigsNotSmoked')} width={metricCardWidth} />
-          <MetricCard icon="✦" iconBg={Colors.primary} value={`R$ ${moneySaved.toLocaleString(locale)}`} label={t('home.saved')} width={metricCardWidth} />
+          <MetricCard icon="✦" iconBg={Colors.primary} value={formatCurrency(moneySaved, currency, locale)} label={t('home.saved')} width={metricCardWidth} />
           <MetricCard icon="♥" iconBg={Colors.secondary} value={lifeRegainedDays > 0 ? `${lifeRegainedDays}d` : '< 1d'} label={t('home.lifeRegained')} width={metricCardWidth} />
           <MetricCard icon="◎" iconBg={Colors.secondary + 'BB'} value={`${tarAvoidedG}g`} label={t('home.tarAvoided')} width={metricCardWidth} />
         </View>
@@ -492,4 +558,6 @@ const cel = StyleSheet.create({
     borderRadius: 14, paddingVertical: 14, paddingHorizontal: 32,
   },
   btnText: { color: Colors.white, fontWeight: '700', fontSize: 15 },
+  shareBtn: { marginTop: 4, paddingVertical: 8, paddingHorizontal: 16 },
+  shareBtnText: { color: Colors.muted, fontWeight: '600', fontSize: 13, textDecorationLine: 'underline' },
 });
