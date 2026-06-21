@@ -6,6 +6,7 @@ import { Colors } from '@/src/constants/colors';
 import { useUserStore } from '@/src/store/userStore';
 import { useDiaryStore } from '@/src/store/diaryStore';
 import { parseQuitDate } from '@/src/lib/dateUtils';
+import { formatCurrency, localeFor } from '@/src/lib/format';
 import { router } from 'expo-router';
 
 const { width: SCREEN_WIDTH } = Dimensions.get('window');
@@ -114,7 +115,7 @@ function BarChart({ data }: { data: { day: string; value: number }[] }) {
 }
 
 export default function Stats() {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const profile = useUserStore(s => s.profile);
   const relapses = useUserStore(s => s.relapses);
   const entries = useDiaryStore(s => s.entries);
@@ -125,6 +126,8 @@ export default function Stats() {
   const cigarettesPerDay = profile?.cigarettesPerDay ?? 15;
   const pricePerPack = profile?.pricePerPack ?? 12.5;
   const cigarettesPerPack = profile?.cigarettesPerPack ?? 20;
+  const currency = profile?.currency ?? 'BRL';
+  const locale = localeFor(i18n.language);
 
   const days = PERIODS[period];
   const savingsPoints = buildSavingsPoints(quitDate, days, cigarettesPerDay, pricePerPack, cigarettesPerPack);
@@ -197,10 +200,10 @@ export default function Stats() {
         <View style={styles.chartCard}>
           <Text style={styles.chartLabel}>{t('stats.accumulatedSavings')}</Text>
           <View style={styles.chartValueRow}>
-            <Text style={styles.chartMainValue}>R$ {totalSaved.toLocaleString('pt-BR')}</Text>
+            <Text style={styles.chartMainValue}>{formatCurrency(totalSaved, currency, locale)}</Text>
             {todaySavings > 0 && (
               <View style={styles.todayBadge}>
-                <Text style={styles.todayBadgeText}>{t('stats.todaySavings', { amount: todaySavings })}</Text>
+                <Text style={styles.todayBadgeText}>{t('stats.todaySavings', { amount: formatCurrency(todaySavings, currency, locale) })}</Text>
               </View>
             )}
           </View>
@@ -264,7 +267,7 @@ export default function Stats() {
         <View style={styles.summaryRow}>
           <View style={styles.summaryCard}>
             <Text style={styles.summaryIcon}>✦</Text>
-            <Text style={styles.summaryValue}>R$ {((cigarettesPerDay / cigarettesPerPack) * pricePerPack * Math.max(daysSince, 0)).toLocaleString('pt-BR', { maximumFractionDigits: 0 })}</Text>
+            <Text style={styles.summaryValue}>{formatCurrency((cigarettesPerDay / cigarettesPerPack) * pricePerPack * Math.max(daysSince, 0), currency, locale)}</Text>
             <Text style={styles.summaryLabel}>{t('stats.totalSaved')}</Text>
           </View>
           <View style={styles.summaryCard}>

@@ -2,7 +2,7 @@ import { create } from 'zustand';
 import { persist, createJSONStorage } from 'zustand/middleware';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-export type SupportedLanguage = 'pt' | 'en';
+export type SupportedLanguage = 'pt' | 'en' | 'es';
 
 interface LanguageState {
   language: SupportedLanguage | null; // null means "use device locale"

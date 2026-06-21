@@ -2,14 +2,18 @@
   "expo": {
     "name": "Libre",
     "slug": "libre",
-    "version": "1.0.0",
+    "version": "1.1.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "dark",
     "scheme": "libre",
+    "description": "Libre — companheiro para parar de fumar: contador de tempo sem fumar, dinheiro economizado, marcos de saúde, diário de fissuras e SOS para momentos difíceis.",
     "ios": {
       "supportsTablet": false,
-      "bundleIdentifier": "com.lacerda.libre"
+      "bundleIdentifier": "com.lacerda.libre",
+      "config": {
+        "usesNonExemptEncryption": false
+      }
     },
     "android": {
       "package": "com.lacerda.libre",
@@ -41,7 +45,8 @@
           "image": "./assets/splash_icon.png",
           "imageWidth": 200
         }
-      ]
+      ],
+      "expo-sharing"
     ],
     "experiments": {
       "typedRoutes": true

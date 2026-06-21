@@ -22,6 +22,7 @@
     "remaining": "{{label}} left",
     "achievementUnlocked": "Achievement unlocked!",
     "incredibleBtn": "Amazing! 🎉",
+    "shareBtn": "Share",
     "quoteSection": "Quote of the day",
     "thisWeek": "THIS WEEK",
     "cravingsRegistered": "cravings\nrecorded",
@@ -42,7 +43,7 @@
     "timeLeft_cravings_other": "{{count}} cravings beaten",
     "timeLeft_entries_one": "{{count}} entry",
     "timeLeft_entries_other": "{{count}} entries",
-    "timeLeft_money": "$ {{amount}}",
+    "timeLeft_money": "{{amount}}",
     "timeSteps": {
       "h12": "First Night",
       "h24": "First Dawn",
@@ -189,7 +190,7 @@
     "last30days": "Last 30 days",
     "lastYear": "Last year",
     "accumulatedSavings": "ACCUMULATED SAVINGS",
-    "todaySavings": "+ $ {{amount}} today",
+    "todaySavings": "+ {{amount}} today",
     "fewData": "Not enough data yet — keep it up!",
     "cravingsByWeekday": "CRAVINGS BY DAY OF THE WEEK",
     "hardestDay": "{{day}} is the hardest day — stay alert.",
@@ -225,17 +226,19 @@
     "cigsPerDay": "Cigarettes per day",
     "cigsPerDayValue": "{{count}} cigarettes",
     "pricePerPack": "Pack price",
-    "pricePerPackValue": "$ {{price}}",
+    "pricePerPackValue": "{{price}}",
     "cigsPerPack": "Cigarettes per pack",
     "cigsPerPackValue": "{{count}} cigarettes",
+    "currency": "CURRENCY",
+    "save": "Save",
     "notifications": "NOTIFICATIONS",
     "dailyMotivation": "Daily motivation",
     "dailyAt": "Every day at 9am",
     "achievements": "ACHIEVEMENTS",
     "achievementCategories": {
-      "TEMPO": "TIME",
-      "ECONOMIA": "SAVINGS",
-      "DIÁRIO": "DIARY"
+      "time": "TIME",
+      "savings": "SAVINGS",
+      "diary": "DIARY"
     },
     "logout": "Sign out",
     "logoutTitle": "Sign out",
@@ -327,12 +330,9 @@
       "subtitle": "Your data stays only on your device and helps personalize your experience.",
       "nameLabel": "YOUR NAME",
       "namePh": "What should we call you?",
-      "emailLabel": "E-MAIL",
-      "emailPh": "your@email.com",
       "privacy": "🔒 Your data is never shared with third parties.",
       "continueBtn": "Continue →",
-      "nameError": "Please enter your name",
-      "emailError": "Invalid email"
+      "nameError": "Please enter your name"
     },
     "when": {
       "title": "When did you quit?",
@@ -351,9 +351,9 @@
       "cigsPerPack": "CIGARETTES PER PACK",
       "cigUnit": "cig",
       "calcText": "✦ You spend about ",
-      "calcMonth": "$ {{amount}}/month",
+      "calcMonth": "{{amount}}/month",
       "calcYearSuffix": " on cigarettes. In 1 year that is ",
-      "calcYear": "$ {{amount}}.",
+      "calcYear": "{{amount}}.",
       "continueBtn": "Continue →"
     },
     "triggers": {
@@ -370,6 +370,16 @@
         "work": "💼 Work",
         "anxiety": "😰 Anxiety"
       }
+    },
+    "notifications": {
+      "title": "Want reminders to keep you on track?",
+      "subtitle": "We'll send motivational messages and let you know about your milestones. You can turn this off anytime.",
+      "enableBtn": "Enable notifications",
+      "skipBtn": "Not now"
+    },
+    "header": {
+      "step": "STEP {{step}} OF {{total}}",
+      "skip": "Skip"
     }
   },
   "achievements": {

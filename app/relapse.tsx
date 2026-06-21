@@ -5,12 +5,10 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { useTranslation } from 'react-i18next';
 import { Colors } from '@/src/constants/colors';
 import { useUserStore } from '@/src/store/userStore';
-import { useAchievementsStore } from '@/src/store/achievementsStore';
 
 export default function Relapse() {
   const { t } = useTranslation();
   const addRelapse = useUserStore(s => s.addRelapse);
-  const resetAchievements = useAchievementsStore(s => s.reset);
   const [cigarettes, setCigarettes] = useState('1');
   const [step, setStep] = useState<'question' | 'reset-confirm' | 'continue-confirm'>('question');
 
@@ -18,7 +16,6 @@ export default function Relapse() {
 
   function handleReset() {
     addRelapse(cigCount, true);
-    resetAchievements();
     router.replace('/(tabs)');
   }
 

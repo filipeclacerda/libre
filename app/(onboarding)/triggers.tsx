@@ -5,11 +5,13 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { useTranslation } from 'react-i18next';
 import { Colors } from '@/src/constants/colors';
 import { OnboardingHeader } from '@/components/ui/OnboardingHeader';
+import { useUserStore } from '@/src/store/userStore';
 
 const TRIGGER_IDS = ['stress', 'coffee', 'alcohol', 'meal', 'boredom', 'social', 'work', 'anxiety'];
 
 export default function Triggers() {
   const { t } = useTranslation();
+  const setProfile = useUserStore(s => s.setProfile);
   const [selected, setSelected] = useState<string[]>(['stress', 'coffee']);
 
   const toggle = (id: string) => {
@@ -20,7 +22,7 @@ export default function Triggers() {
 
   return (
     <SafeAreaView style={styles.container}>
-      <OnboardingHeader step={4} total={4} onBack={() => router.back()} />
+      <OnboardingHeader step={4} total={5} onBack={() => router.back()} />
 
       <View style={styles.content}>
         <Text style={styles.title}>{t('onboarding.triggers.title')}</Text>
@@ -48,7 +50,10 @@ export default function Triggers() {
       <View style={styles.footer}>
         <TouchableOpacity
           style={[styles.primaryButton, selected.length === 0 && styles.primaryButtonDisabled]}
-          onPress={() => router.replace('/(tabs)')}
+          onPress={() => {
+            setProfile({ triggers: selected });
+            router.push('/(onboarding)/notifications');
+          }}
           activeOpacity={0.85}
           disabled={selected.length === 0}
         >

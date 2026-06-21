@@ -1,38 +1,40 @@
 import { useEffect } from 'react';
 import { Stack } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
-import * as Notifications from 'expo-notifications';
 import { Platform } from 'react-native';
 import { Colors } from '@/src/constants/colors';
 import { initI18n } from '@/src/i18n';
 import { useLanguageStore } from '@/src/store/languageStore';
-
-// How to handle notifications when the app is in foreground
-Notifications.setNotificationHandler({
-  handleNotification: async () => ({
-    shouldShowAlert: true,
-    shouldShowBanner: true,
-    shouldShowList: true,
-    shouldPlaySound: true,
-    shouldSetBadge: false,
-  }),
-});
+import { useUserStore } from '@/src/store/userStore';
+import { useDiaryStore } from '@/src/store/diaryStore';
+import {
+  getPermissionStatus,
+  syncNotifications,
+  setupNotificationHandler,
+  setupAndroidChannel,
+} from '@/src/lib/notifications';
 
 export default function RootLayout() {
   const language = useLanguageStore(s => s.language);
+  const profile = useUserStore(s => s.profile);
+  const entries = useDiaryStore(s => s.entries);
+  const hasHydrated = useUserStore(s => s._hasHydrated);
 
   // Initialize i18n with the manually selected language (or device locale)
   initI18n(language);
 
   useEffect(() => {
-    if (Platform.OS === 'web') return;
-    // Create a notification channel for Android
-    Notifications.setNotificationChannelAsync('default', {
-      name: 'Libre',
-      importance: Notifications.AndroidImportance.DEFAULT,
-      sound: 'default',
-    });
+    // Configure foreground handling + Android channel (no-ops on web / Expo Go Android)
+    setupNotificationHandler();
+    setupAndroidChannel();
   }, []);
+
+  // Re-sync notifications for returning users who already granted permission
+  useEffect(() => {
+    if (Platform.OS === 'web' || !hasHydrated || !profile) return;
+    getPermissionStatus().then(granted => { if (granted) syncNotifications(profile, entries); });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [hasHydrated, profile?.quitDate, profile?.streakStart, entries.length]);
 
   return (
     <>

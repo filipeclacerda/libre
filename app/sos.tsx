@@ -5,6 +5,8 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { useTranslation } from 'react-i18next';
 import { Colors } from '@/src/constants/colors';
 import { useDiaryStore } from '@/src/store/diaryStore';
+import { useUserStore } from '@/src/store/userStore';
+import { TRIGGER_ID_TO_DIARY_KEY, TriggerId } from '@/src/constants/triggers';
 
 type SOSView = 'menu' | 'breathe' | 'wait' | 'record';
 
@@ -171,8 +173,11 @@ function WaitView({ onBack }: { onBack: () => void }) {
 function RecordView({ onBack }: { onBack: () => void }) {
   const { t } = useTranslation();
   const addEntry = useDiaryStore(s => s.addEntry);
+  const profile = useUserStore(s => s.profile);
+  const mapped = profile?.triggers?.[0] ? TRIGGER_ID_TO_DIARY_KEY[profile.triggers[0] as TriggerId] : undefined;
+  const defaultTrigger = mapped && QUICK_TRIGGER_KEYS.includes(mapped) ? mapped : 'Estresse';
   const [intensity, setIntensity] = useState<1|2|3|4|5>(3);
-  const [trigger, setTrigger] = useState('Estresse');
+  const [trigger, setTrigger] = useState(defaultTrigger);
   const [resisted, setResisted] = useState(true);
   const [notes, setNotes] = useState('');
   const [saved, setSaved] = useState(false);

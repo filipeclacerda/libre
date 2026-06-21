@@ -1,4 +1,5 @@
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
+import { useTranslation } from 'react-i18next';
 import { Colors } from '@/src/constants/colors';
 
 interface Props {
@@ -9,17 +10,18 @@ interface Props {
 }
 
 export function OnboardingHeader({ step, total, onBack, onSkip }: Props) {
+  const { t } = useTranslation();
   return (
     <View style={styles.container}>
       <TouchableOpacity style={styles.backBtn} onPress={onBack} activeOpacity={0.7}>
         <Text style={styles.backText}>‹</Text>
       </TouchableOpacity>
 
-      <Text style={styles.stepLabel}>ETAPA {step} DE {total}</Text>
+      <Text style={styles.stepLabel}>{t('onboarding.header.step', { step, total })}</Text>
 
       {onSkip ? (
         <TouchableOpacity onPress={onSkip} activeOpacity={0.7}>
-          <Text style={styles.skipText}>Pular</Text>
+          <Text style={styles.skipText}>{t('onboarding.header.skip')}</Text>
         </TouchableOpacity>
       ) : (
         <View style={styles.placeholder} />
